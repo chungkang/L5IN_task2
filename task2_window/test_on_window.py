@@ -1,5 +1,7 @@
 from tkinter import *
-from tkinter import messagebox
+from tkinter import (
+		messagebox, filedialog
+	)
 import tkinter.ttk
 
 # Settings
@@ -24,6 +26,25 @@ def attack():
 	counter += 1
 	player_level.config(text=str(counter))
 
+excel_ext = r"*.xlsx *.xls *.csv"
+
+def file_find():
+    file = filedialog.askopenfilenames(filetypes=(("Excel file", excel_ext),("all file", "*.*")), initialdir=r"C:\Users")
+    en_filepath.delete(0,END)
+    en_filepath.insert(END, file[0])
+        
+# def file_upload():
+#     if len(en_filepath.get()) == 0:
+#         mbox.showinfo("warning","select file, please")
+#         return
+#     else:
+#         file_name = os.path.basename(en_filepath.get())
+#         dest_path = os.path.join("D:\\", file_name)
+#         shutil.copy(en_filepath.get(),dest_path)
+#         en_filepath.delete(0,END)    
+#         return
+ 
+
 # notebook
 notebook = tkinter.ttk.Notebook(root, width=400, height=400, takefocus=True)
 notebook.pack()
@@ -41,10 +62,20 @@ view = Label(frame1, text="이전 채팅: ")
 view.pack(side="top", anchor="nw")
 btn = Button(frame1, text="확인",command=chatting,width=3,height=1)
 btn.pack(side="bottom", fill="both")
-txt = Entry(frame1)
-txt.pack(side="bottom", fill="both")
-guide = Label(frame1, text="채팅: ")
-guide.pack(side="bottom", anchor="nw")
+# txt = Entry(frame1)
+# txt.pack(side="bottom", fill="both")
+# guide = Label(frame1, text="채팅: ")
+# guide.pack(side="bottom", anchor="nw")
+
+en_filepath = Entry(frame1, width=100)
+en_filepath.pack(fill="x", padx=1, pady=1)
+
+# bt_upload = Button(frame1, text="Upload", width=10, command= file_upload)
+# bt_upload.pack(side="right", padx=1, pady=1)
+bt_find = Button(frame1, text="Find", width=10, command= file_find)
+bt_find.pack(side="right", padx=1, pady=1)
+
+
 
 # frame. 2
 frame2 = Frame(root)
