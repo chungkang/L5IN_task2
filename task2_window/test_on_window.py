@@ -3,6 +3,8 @@ from tkinter import (
 		messagebox, filedialog
 	)
 import tkinter.ttk
+import os
+# print (os.path.dirname(os.path.realpath(__file__)))#파일이 위치한 디렉터리
 
 # Settings
 root = Tk()
@@ -53,12 +55,12 @@ notebook.pack()
 frame1 = Frame(root)
 notebook.add(frame1, text="1: Select Image")
 
-guide_level = Label(frame1, text="Level. ")
+guide_level = Label(frame1, text=os.path.dirname(os.path.realpath(__file__)))
 guide_level.pack(side="top")
 player_level = Label(frame1, text=str(player_value))
 player_level.pack(side="top")
 
-view = Label(frame1, text="이전 채팅: ")
+view = Label(frame1, text="File Path: ")
 view.pack(side="top", anchor="nw")
 btn = Button(frame1, text="확인",command=chatting,width=3,height=1)
 btn.pack(side="bottom", fill="both")
@@ -75,6 +77,11 @@ en_filepath.pack(fill="x", padx=1, pady=1)
 bt_find = Button(frame1, text="Find", width=10, command= file_find)
 bt_find.pack(side="right", padx=1, pady=1)
 
+# file_path = os.path.realpath(__file__)
+
+image = tkinter.PhotoImage(file="task2_window\\a.png")
+label = tkinter.Label(frame1, image=image)
+label.pack()
 
 
 # frame. 2
