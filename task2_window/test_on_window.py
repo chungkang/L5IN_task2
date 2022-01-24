@@ -5,6 +5,7 @@ from tkinter import (
 import tkinter.ttk
 import os
 # print (os.path.dirname(os.path.realpath(__file__)))#파일이 위치한 디렉터리
+from PIL import Image,ImageTk
 
 # Settings
 root = Tk()
@@ -34,7 +35,14 @@ def file_find():
     file = filedialog.askopenfilenames(filetypes=(("Excel file", excel_ext),("all file", "*.*")), initialdir=r"C:\Users")
     en_filepath.delete(0,END)
     en_filepath.insert(END, file[0])
-        
+
+	# image = Image.new('1', (100, 100), 0)
+	# image = tkinter.PhotoImage(file="task2_window\\a.png")
+	# label = tkinter.Label(frame1, image=image)
+    # label.config(image=tkimg[0])
+    # root.update_idletasks()
+    # root.after(delay, loopCapture)
+
 # def file_upload():
 #     if len(en_filepath.get()) == 0:
 #         mbox.showinfo("warning","select file, please")
@@ -82,7 +90,6 @@ bt_find.pack(side="right", padx=1, pady=1)
 image = tkinter.PhotoImage(file="task2_window\\a.png")
 label = tkinter.Label(frame1, image=image)
 label.pack()
-
 
 # frame. 2
 frame2 = Frame(root)
