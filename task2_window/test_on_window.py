@@ -32,6 +32,7 @@ notebook.add(frame1, text="1: Selecting Image")
 # frame1 functions
 rectify_yn = StringVar()
 new_dir_nm = current_path
+frame1_save_image = StringVar()
 
 def file_find():
 	image_ext = r"*.jpg *.jpeg *.png"
@@ -40,9 +41,9 @@ def file_find():
 	en_filepath.insert(END, file[0])
 
 	if en_filepath:
-		global photo2  # Garbage Collection : 불필요한 메모리 공간 해제
-		photo2 = ImageTk.PhotoImage(Image.open(en_filepath.get()))
-		image_label.config(image=photo2)
+		global frame1_new_photo
+		frame1_new_photo = ImageTk.PhotoImage(Image.open(en_filepath.get()))
+		image_label.config(image=frame1_new_photo)
 
 def f_01_next():
 	# 실행파일 위치에 날짜시간분 폴더 생성 - 폴더명 변수
@@ -60,9 +61,14 @@ def f_01_next():
 		image_name += "-rectify"
 
 	frame1_img = cv2.imread(en_filepath.get())
-	cv2.imwrite(new_dir_nm + "\\" +image_name + ".png", frame1_img)
+	global frame1_save_image
+	frame1_save_image = new_dir_nm + "\\" +image_name + ".png"
+	cv2.imwrite(frame1_save_image, frame1_img)
 
 	# frame2에 이미지 띄워주기 - 해당 디렉토리에 있는 파일 사용
+	global frame2_new_photo
+	frame2_new_photo = ImageTk.PhotoImage(Image.open(en_filepath.get()))
+	fram2_image_label.config(image=frame2_new_photo)
 	notebook.select(frame2)
 
 view = Label(frame1, text="File Path: ")
@@ -88,14 +94,15 @@ image_label.pack()
 frame2 = Frame(root)
 notebook.add(frame2, text="2: Rectification")
 
-def attack():
-	return
-
-
 monster_name = Label(frame2, text="BOSS")
 monster_name.pack()
-attack_button = Button(frame2, text="attack", command=attack)
-attack_button.pack(expand=True)
+
+frame2_photo = PhotoImage(file="task2_window\\a.png")
+fram2_image_label = Label(frame2, image=frame2_photo)
+fram2_image_label.pack()
+
+
+
 
 # frame. 3
 frame3 = Frame(root)
