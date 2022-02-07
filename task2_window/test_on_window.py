@@ -5,6 +5,8 @@ from tkinter import (
 import tkinter.ttk
 import os
 from PIL import Image,ImageTk
+from datetime import datetime
+import cv2
 
 current_path = os.path.dirname(os.path.realpath(__file__)) #파일 경로
 
@@ -12,22 +14,27 @@ current_path = os.path.dirname(os.path.realpath(__file__)) #파일 경로
 root = Tk()
 root.title("Map Generator from Rescue Plans")
 root.geometry("500x500")
-root.resizable(False, False)
+# root.resizable(False, False)
 title = Label(root, text="Map Generator")
 title.pack()
 
-# default value
-player_value = 1
+# notebook
+notebook = tkinter.ttk.Notebook(root, width=400, height=400, takefocus=True)
+notebook.pack()
 
+rootHeight = root.winfo_height()
+rootWidth = root.winfo_width()
 
+# frame1 - 1: Selecting Image
+frame1 = Frame(root)
+notebook.add(frame1, text="1: Selecting Image")
 
+# frame1 functions
+rectify_yn = 0
+new_dir_nm = current_path
 
-
-# define functions
-# frame1 - 1: Selecting Image functions
-image_ext = r"*.jpg *.jpeg *.gif *.png"
 def file_find():
-    # file = filedialog.askopenfilenames(filetypes=(("Excel file", excel_ext),("all file", "*.*")), initialdir=r"C:\Users")
+	image_ext = r"*.jpg *.jpeg *.png"
 	file = filedialog.askopenfilenames(filetypes=(("Image file",image_ext),("all file", "*.*")), initialdir=current_path)
 	en_filepath.delete(0,END)
 	en_filepath.insert(END, file[0])
@@ -37,42 +44,53 @@ def file_find():
 		photo2 = ImageTk.PhotoImage(Image.open(en_filepath.get()))
 		image_label.config(image=photo2)
 
-def attack():
-	messagebox.showinfo("Level UP", "몬스터를 처치했습니다!")
-	counter = int(player_level["text"])
-	counter += 1
-	player_level.config(text=str(counter))
+def f_01_next():
+	# 실행파일 위치에 날짜시간분 폴더 생성 - 폴더명 변수
+	global new_dir_nm
+	new_dir_nm += str("\\" + "{:%Y%m%d%H%M}".format(datetime.now()))
+	
+	if not os.path.exists(new_dir_nm):
+		os.makedirs(new_dir_nm)
 
+	image_name = "01_original"
 
-# notebook
-notebook = tkinter.ttk.Notebook(root, width=400, height=400, takefocus=True)
-notebook.pack()
+	global rectify_yn
+	print(rectify_yn)
+	if rectify_yn:
+		image_name += "-rectify"
 
-# frame1 - 1: Selecting Image
-frame1 = Frame(root)
-notebook.add(frame1, text="1: Selecting Image")
+	frame1_img = cv2.imread(en_filepath.get())
+	cv2.imwrite(new_dir_nm + "\\" +image_name + ".png", frame1_img)
+
+	# frame2에 이미지 띄워주기 - 해당 디렉토리에 있는 파일 사용
+	notebook.select(frame2)
 
 view = Label(frame1, text="File Path: ")
-view.pack(side="top", anchor="nw")
-# btn = Button(frame1, text="확인",command=chatting,width=3,height=1)
-# btn.pack(side="bottom", fill="both")
+view.pack(side="top", anchor="w")
 
 en_filepath = Entry(frame1, width=100)
-en_filepath.pack(fill="x", padx=1, pady=1)
+en_filepath.pack(side="top", anchor="w")
 
 bt_find = Button(frame1, text="Find", width=10, command= file_find)
-bt_find.pack(side="top", padx=1, pady=1)
+bt_find.pack(side="top", anchor="e")
+
+Radiobutton(frame1, text = "Yes", variable = rectify_yn, value = 1).pack(side = "top", ipady = 5)
+Radiobutton(frame1, text = "No", variable = rectify_yn, value = 0).pack(side = "top", ipady = 5)
+
+bt_01_next = Button(frame1, text="Next", width=10,overrelief="solid", command= f_01_next)
+bt_01_next.pack(side="bottom", anchor="e")
 
 photo = PhotoImage(file="task2_window\\a.png")
 image_label = Label(frame1, image=photo)
 image_label.pack()
 
-
-
-
-# frame. 2
+# frame2
 frame2 = Frame(root)
 notebook.add(frame2, text="2: Rectification")
+
+def attack():
+	return
+
 
 monster_name = Label(frame2, text="BOSS")
 monster_name.pack()
