@@ -30,7 +30,7 @@ frame1 = Frame(root)
 notebook.add(frame1, text="1: Selecting Image")
 
 # frame1 functions
-rectify_yn = 0
+rectify_yn = StringVar()
 new_dir_nm = current_path
 
 def file_find():
@@ -55,8 +55,8 @@ def f_01_next():
 	image_name = "01_original"
 
 	global rectify_yn
-	print(rectify_yn)
-	if rectify_yn:
+	print(rectify_yn.get())
+	if rectify_yn.get():
 		image_name += "-rectify"
 
 	frame1_img = cv2.imread(en_filepath.get())
