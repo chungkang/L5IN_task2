@@ -30,9 +30,11 @@ frame1 = Frame(root)
 notebook.add(frame1, text="1: Selecting Image")
 
 # frame1 functions
-rectify_yn = StringVar()
-new_dir_nm = current_path
-frame1_save_image = StringVar()
+# rectify_yn = StringVar()
+rectify_yn = 0	# image rectify done yn
+frame1_count = 0	# frame1 process count
+new_dir_nm = current_path	# using directory name
+frame1_save_image = ''	# frame1's image path
 
 def file_find():
 	image_ext = r"*.jpg *.jpeg *.png"
@@ -46,18 +48,19 @@ def file_find():
 		image_label.config(image=frame1_new_photo)
 
 def f_01_next():
-	# 실행파일 위치에 날짜시간분 폴더 생성 - 폴더명 변수
-	global new_dir_nm
-	new_dir_nm += str("\\" + "{:%Y%m%d%H%M}".format(datetime.now()))
-	
-	if not os.path.exists(new_dir_nm):
-		os.makedirs(new_dir_nm)
+	# only the first time at frame1 make new directory
+	global frame1_count
+	if frame1_count == 0:
+		global new_dir_nm
+		new_dir_nm += str("\\" + "{:%Y%m%d%H%M}".format(datetime.now()))
+
+		if not os.path.exists(new_dir_nm):
+			os.makedirs(new_dir_nm)
 
 	image_name = "01_original"
 
 	global rectify_yn
-	print(rectify_yn.get())
-	if rectify_yn.get():
+	if rectify_yn == 1:
 		image_name += "-rectify"
 
 	frame1_img = cv2.imread(en_filepath.get())
@@ -70,6 +73,7 @@ def f_01_next():
 	frame2_new_photo = ImageTk.PhotoImage(Image.open(en_filepath.get()))
 	fram2_image_label.config(image=frame2_new_photo)
 	notebook.select(frame2)
+	frame1_count += 1
 
 view = Label(frame1, text="File Path: ")
 view.pack(side="top", anchor="w")
