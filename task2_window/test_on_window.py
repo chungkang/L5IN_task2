@@ -13,13 +13,13 @@ current_path = os.path.dirname(os.path.realpath(__file__)) #파일 경로
 # Settings
 root = Tk()
 root.title("Map Generator from Rescue Plans")
-root.geometry("500x500")
+root.geometry("800x600")
 # root.resizable(False, False)
 title = Label(root, text="Map Generator")
 title.pack()
 
 # notebook
-notebook = tkinter.ttk.Notebook(root, width=400, height=400, takefocus=True)
+notebook = tkinter.ttk.Notebook(root, width=700, height=500, takefocus=True)
 notebook.pack()
 
 rootHeight = root.winfo_height()
@@ -94,12 +94,31 @@ photo = PhotoImage(file="task2_window\\a.png")
 image_label = Label(frame1, image=photo)
 image_label.pack()
 
+
 # frame2
 frame2 = Frame(root)
 notebook.add(frame2, text="2: Rectification")
 
-monster_name = Label(frame2, text="BOSS")
-monster_name.pack()
+point_nw_nm = Label(frame2, text="nw: ")
+point_nw_nm.pack(side="top", anchor="w")
+point_nw = Entry(frame2, width=30)
+point_nw.pack(side="top", anchor="w")
+
+point_ne_nm = Label(frame2, text="ne: ")
+point_ne_nm.pack(side="top", anchor="w")
+point_ne = Entry(frame2, width=30)
+point_ne.pack(side="top", anchor="w")
+
+point_sw_nm = Label(frame2, text="nw: ")
+point_sw_nm.pack(side="top", anchor="w")
+point_sw = Entry(frame2, width=30)
+point_sw.pack(side="top", anchor="w")
+
+point_se_nm = Label(frame2, text="nw: ")
+point_se_nm.pack(side="top", anchor="w")
+point_se = Entry(frame2, width=30)
+point_se.pack(side="top", anchor="w")
+
 
 frame2_photo = PhotoImage(file="task2_window\\a.png")
 fram2_image_label = Label(frame2, image=frame2_photo)
