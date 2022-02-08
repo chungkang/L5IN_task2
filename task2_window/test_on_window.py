@@ -99,31 +99,55 @@ image_label.pack()
 frame2 = Frame(root)
 notebook.add(frame2, text="2: Rectification")
 
-point_nw_nm = Label(frame2, text="nw: ")
-point_nw_nm.pack(side="top", anchor="w")
-point_nw = Entry(frame2, width=30)
-point_nw.pack(side="top", anchor="w")
+image_point_title = Label(frame2, text="Image Points: ")
+image_point_title.grid(row=0, column=0)
+image_point_nw_nm = Label(frame2, text="nw: ")
+image_point_nw_nm.grid(row=1, column=0)
+image_point_nw = Entry(frame2)
+image_point_nw.grid(row=1, column=1)
 
-point_ne_nm = Label(frame2, text="ne: ")
-point_ne_nm.pack(side="top", anchor="w")
-point_ne = Entry(frame2, width=30)
-point_ne.pack(side="top", anchor="w")
+image_point_ne_nm = Label(frame2, text="ne: ")
+image_point_ne_nm.grid(row=2, column=0)
+image_point_ne = Entry(frame2)
+image_point_ne.grid(row=2, column=1)
 
-point_sw_nm = Label(frame2, text="nw: ")
-point_sw_nm.pack(side="top", anchor="w")
-point_sw = Entry(frame2, width=30)
-point_sw.pack(side="top", anchor="w")
+image_point_sw_nm = Label(frame2, text="sw: ")
+image_point_sw_nm.grid(row=3, column=0)
+image_point_sw = Entry(frame2)
+image_point_sw.grid(row=3, column=1)
 
-point_se_nm = Label(frame2, text="nw: ")
-point_se_nm.pack(side="top", anchor="w")
-point_se = Entry(frame2, width=30)
-point_se.pack(side="top", anchor="w")
+image_point_se_nm = Label(frame2, text="se: ")
+image_point_se_nm.grid(row=4, column=0)
+image_point_se = Entry(frame2)
+image_point_se.grid(row=4, column=1)
+
+control_point_title = Label(frame2, text="Control Points: ")
+control_point_title.grid(row=0, column=2)
+control_point_nw_nm = Label(frame2, text="nw: ")
+control_point_nw_nm.grid(row=1, column=2)
+control_point_nw = Entry(frame2)
+control_point_nw.grid(row=1, column=3)
+
+control_point_ne_nm = Label(frame2, text="ne: ")
+control_point_ne_nm.grid(row=2, column=2)
+control_point_ne = Entry(frame2)
+control_point_ne.grid(row=2, column=3)
+
+control_point_sw_nm = Label(frame2, text="sw: ")
+control_point_sw_nm.grid(row=3, column=2)
+control_point_sw = Entry(frame2)
+control_point_sw.grid(row=3, column=3)
+
+control_point_se_nm = Label(frame2, text="se: ")
+control_point_se_nm.grid(row=4, column=2)
+control_point_se = Entry(frame2)
+control_point_se.grid(row=4, column=3)
+
 
 
 frame2_photo = PhotoImage(file="task2_window\\a.png")
 fram2_image_label = Label(frame2, image=frame2_photo)
-fram2_image_label.pack()
-
+fram2_image_label.grid(row=5, column=0, columnspan=4, sticky=W+E+N+S)
 
 
 
