@@ -5,6 +5,7 @@ from tkinter import (
 import tkinter.ttk
 import os
 from PIL import Image,ImageTk
+import PIL
 from datetime import datetime
 import cv2
 
@@ -20,7 +21,7 @@ title.pack()
 
 # notebook
 notebook = tkinter.ttk.Notebook(root, width=700, height=500, takefocus=True)
-notebook.pack()
+notebook.pack(fill=tkinter.BOTH)
 
 rootHeight = root.winfo_height()
 rootWidth = root.winfo_width()
@@ -75,6 +76,16 @@ def f_01_next():
 	notebook.select(frame2)
 	frame1_count += 1
 
+# 	fixed_width = 700
+# frame1_image = Image.open("task2_window\\a.png")
+# image_percent = (fixed_width / float(frame1_image.size[0]))
+# image_height = int(float(frame1_image.size[1])*float(image_percent))
+# frame1_image = frame1_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
+# photo = ImageTk.PhotoImage(frame1_image)
+# image_label = Label(frame1, image=photo)
+# image_label.pack()
+
+
 view = Label(frame1, text="File Path: ")
 view.pack(side="top", anchor="w")
 
@@ -87,10 +98,15 @@ bt_find.pack(side="top", anchor="e")
 Radiobutton(frame1, text = "Yes", variable = rectify_yn, value = 1).pack(side = "top", ipady = 5)
 Radiobutton(frame1, text = "No", variable = rectify_yn, value = 0).pack(side = "top", ipady = 5)
 
-bt_01_next = Button(frame1, text="Next", width=10,overrelief="solid", command= f_01_next)
+bt_01_next = Button(frame1, text="Next", width=10, overrelief="solid", command= f_01_next)
 bt_01_next.pack(side="bottom", anchor="e")
 
-photo = PhotoImage(file="task2_window\\a.png")
+fixed_width = 700
+frame1_image = Image.open("task2_window\\a.png")
+image_percent = (fixed_width / float(frame1_image.size[0]))
+image_height = int(float(frame1_image.size[1])*float(image_percent))
+frame1_image = frame1_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
+photo = ImageTk.PhotoImage(frame1_image)
 image_label = Label(frame1, image=photo)
 image_label.pack()
 
