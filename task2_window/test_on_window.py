@@ -45,8 +45,13 @@ def file_find():
 
 	if en_filepath:
 		global frame1_new_photo
-		frame1_new_photo = ImageTk.PhotoImage(Image.open(en_filepath.get()))
-		image_label.config(image=frame1_new_photo)
+		fixed_width = 700
+		frame1_new_image = Image.open(en_filepath.get())
+		image_percent = (fixed_width / float(frame1_new_image.size[0]))
+		image_height = int(float(frame1_new_image.size[1])*float(image_percent))
+		frame1_new_image = frame1_new_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
+		frame1_new_photo = ImageTk.PhotoImage(frame1_new_image)
+		frame1_image_label.config(image=frame1_new_photo)
 
 def f_01_next():
 	# only the first time at frame1 make new directory
@@ -76,16 +81,6 @@ def f_01_next():
 	notebook.select(frame2)
 	frame1_count += 1
 
-# 	fixed_width = 700
-# frame1_image = Image.open("task2_window\\a.png")
-# image_percent = (fixed_width / float(frame1_image.size[0]))
-# image_height = int(float(frame1_image.size[1])*float(image_percent))
-# frame1_image = frame1_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
-# photo = ImageTk.PhotoImage(frame1_image)
-# image_label = Label(frame1, image=photo)
-# image_label.pack()
-
-
 view = Label(frame1, text="File Path: ")
 view.pack(side="top", anchor="w")
 
@@ -107,8 +102,8 @@ image_percent = (fixed_width / float(frame1_image.size[0]))
 image_height = int(float(frame1_image.size[1])*float(image_percent))
 frame1_image = frame1_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
 photo = ImageTk.PhotoImage(frame1_image)
-image_label = Label(frame1, image=photo)
-image_label.pack()
+frame1_image_label = Label(frame1, image=photo)
+frame1_image_label.pack()
 
 
 # frame2
