@@ -75,9 +75,15 @@ def f_01_next():
 	cv2.imwrite(frame1_save_image, frame1_img)
 
 	# frame2에 이미지 띄워주기 - 해당 디렉토리에 있는 파일 사용
+	fixed_width = 700
 	global frame2_new_photo
-	frame2_new_photo = ImageTk.PhotoImage(Image.open(en_filepath.get()))
-	fram2_image_label.config(image=frame2_new_photo)
+	frame2_new_image = Image.open(en_filepath.get())
+	image_percent = (fixed_width / float(frame2_new_image.size[0]))
+	image_height = int(float(frame2_new_image.size[1])*float(image_percent))
+	frame2_new_image = frame2_new_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
+	frame2_new_photo = ImageTk.PhotoImage(frame2_new_image)
+	frame2_image_label.config(image=frame2_new_photo)
+	
 	notebook.select(frame2)
 	frame1_count += 1
 
@@ -104,7 +110,6 @@ frame1_image = frame1_image.resize((fixed_width, image_height), PIL.Image.NEARES
 photo = ImageTk.PhotoImage(frame1_image)
 frame1_image_label = Label(frame1, image=photo)
 frame1_image_label.pack()
-
 
 # frame2
 frame2 = Frame(root)
@@ -155,10 +160,14 @@ control_point_se_nm.grid(row=4, column=2)
 control_point_se = Entry(frame2, width=20)
 control_point_se.grid(row=4, column=3)
 
-
-frame2_photo = PhotoImage(file="task2_window\\a.png")
-fram2_image_label = Label(frame2, width = 700, image=frame2_photo)
-fram2_image_label.grid(row=5, column=0, columnspan=4, sticky=W+E+N+S)
+fixed_width = 700
+frame2_image = Image.open("task2_window\\a.png")
+image_percent = (fixed_width / float(frame2_image.size[0]))
+image_height = int(float(frame2_image.size[1])*float(image_percent))
+frame2_image = frame2_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
+frame2_photo = ImageTk.PhotoImage(frame2_image)
+frame2_image_label = Label(frame2, image=frame2_photo)
+frame2_image_label.grid(row=5, column=0, columnspan=4, sticky=W+E+N+S)
 
 bt_02_next = Button(frame2, text="Next", width=10, overrelief="solid", command= f_01_next)
 bt_02_next.grid(row=6, column=3)
