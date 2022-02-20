@@ -10,6 +10,7 @@ from datetime import datetime
 import cv2
 
 import module.rectify as rectify
+import module.binary as binary
 
 current_path = os.path.dirname(os.path.realpath(__file__)) #파일 경로
 
@@ -213,17 +214,9 @@ def f_02_rectify():
 	frame2_image_label.config(image=frame2_rectify_photo)
 	
 	notebook.select(frame2)
-	frame1_count += 1
-
-
-
-
-
-
-
 
 def f_02_next():
-	return ''
+	notebook.select(frame3)
 
 bt_02_rectify = Button(frame2, text="Retify", width=10, overrelief="solid", command= f_02_rectify)
 bt_02_rectify.grid(row=7, column=0)
@@ -235,8 +228,34 @@ bt_02_next.grid(row=7, column=1)
 frame3 = Frame(root)
 notebook.add(frame3, text="3: Binarization")
 
-exit_button = Button(frame3, text="나가기", command=root.destroy)
-exit_button.pack(expand=True)
+# exit_button = Button(frame3, text="나가기", command=root.destroy)
+# exit_button.pack(expand=True)
+
+def f_03_binary():
+	# transforme to an binary image (False if no rectify is done, True when some rectify is done)
+
+	global new_dir_nm
+	bin_image = binary.fn_binary(new_dir_nm,'02_rectify.png',True)
+
+def f_03_next():
+	notebook.select(frame4)
+
+bt_03_binary = Button(frame3, text="Binary", width=10, overrelief="solid", command= f_03_binary)
+bt_03_binary.pack(side="bottom", anchor="w")
+
+bt_03_next = Button(frame3, text="Next", width=10, overrelief="solid", command= f_03_next)
+bt_03_next.pack(side="bottom", anchor="e")
+
+fixed_width = 700
+frame3_image = Image.open("task2_window\\a.png")
+image_percent = (fixed_width / float(frame3_image.size[0]))
+image_height = int(float(frame3_image.size[1])*float(image_percent))
+frame3_image = frame3_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
+photo = ImageTk.PhotoImage(frame3_image)
+frame3_image_label = Label(frame3, image=photo)
+frame3_image_label.pack()
+
+
 
 # frame. 4
 frame4 = Frame(root)
