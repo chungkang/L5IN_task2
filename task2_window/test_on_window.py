@@ -198,8 +198,29 @@ def f_02_rectify():
 	global frame2_control_points
 	frame2_control_points = str(control_point_1.get()) + "\n" + str(control_point_2.get()) + "\n" + str(control_point_3.get()) + "\n" + str(control_point_4.get())
 	
+	# rectify image
 	global new_dir_nm
-	e_image = rectify.fn_rectify(new_dir_nm,'02_rectify.png',frame2_image_points,frame2_control_points,value1.get(),value2.get())
+	e_image = rectify.fn_rectify(new_dir_nm,'01_original.png',frame2_image_points,frame2_control_points,value1.get(),value2.get())
+
+	# new rectify image to frame2
+	fixed_width = 700
+	global frame2_new_photo
+	frame2_rectify_image = Image.open('%s\\%s' % (new_dir_nm, '02_rectify.png'))
+	image_percent = (fixed_width / float(frame2_rectify_image.size[0]))
+	image_height = int(float(frame2_rectify_image.size[1])*float(image_percent))
+	frame2_rectify_image = frame2_rectify_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
+	frame2_rectify_photo = ImageTk.PhotoImage(frame2_rectify_image)
+	frame2_image_label.config(image=frame2_rectify_photo)
+	
+	notebook.select(frame2)
+	frame1_count += 1
+
+
+
+
+
+
+
 
 def f_02_next():
 	return ''
