@@ -199,7 +199,7 @@ def f_02_rectify():
 	frame2_control_points = str(control_point_1.get()) + "\n" + str(control_point_2.get()) + "\n" + str(control_point_3.get()) + "\n" + str(control_point_4.get())
 	
 	global new_dir_nm
-	e_image = rectify.fn_rectify(new_dir_nm,'01_original.png',frame2_image_points,frame2_control_points,value1.get(),value2.get())
+	e_image = rectify.fn_rectify(new_dir_nm,'02_rectify.png',frame2_image_points,frame2_control_points,value1.get(),value2.get())
 
 def f_02_next():
 	return ''
