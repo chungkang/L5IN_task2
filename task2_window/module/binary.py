@@ -25,7 +25,7 @@ def fn_binary(datapath,imagename,rectify):
     
     # bin_image_file = '%s/Binaer/%s_binaer.jpg' % (datapath,imagename)#save binary image
     # plt.imsave(bin_image_file,bin_image)
-    bin_image_file = '%s\\03_binary.png' % (datapath)#save binary code
+    bin_image_file = '%s\\03_binary.txt' % (datapath)#save binary code
     np.savetxt(bin_image_file,bin_image, delimiter=';')
     
     return bin_image

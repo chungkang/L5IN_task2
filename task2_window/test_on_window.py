@@ -11,6 +11,7 @@ import cv2
 
 import module.rectify as rectify
 import module.binary as binary
+import module.neighbors as neighbors
 
 current_path = os.path.dirname(os.path.realpath(__file__)) #파일 경로
 
@@ -233,7 +234,6 @@ notebook.add(frame3, text="3: Binarization")
 
 def f_03_binary():
 	# transforme to an binary image (False if no rectify is done, True when some rectify is done)
-
 	global new_dir_nm
 	bin_image = binary.fn_binary(new_dir_nm,'02_rectify.png',True)
 
@@ -246,25 +246,33 @@ bt_03_binary.pack(side="bottom", anchor="w")
 bt_03_next = Button(frame3, text="Next", width=10, overrelief="solid", command= f_03_next)
 bt_03_next.pack(side="bottom", anchor="e")
 
-fixed_width = 700
-frame3_image = Image.open("task2_window\\a.png")
-image_percent = (fixed_width / float(frame3_image.size[0]))
-image_height = int(float(frame3_image.size[1])*float(image_percent))
-frame3_image = frame3_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
-photo = ImageTk.PhotoImage(frame3_image)
-frame3_image_label = Label(frame3, image=photo)
-frame3_image_label.pack()
-
-
-
 # frame. 4
 frame4 = Frame(root)
-notebook.add(frame4, text="4: Lines")
-# notebook.insert(2, frame4, text="4: Detacting Lines")
+notebook.add(frame4, text="4: Neighbors")
 
-potion = Label(frame4, text="물약: 1000\\")
-potion.pack()
-sword = Label(frame4, text="무기 강화: 2500\\")
-sword.pack()
+def f_04_neighbors():
+	# transforme to an binary image (False if no rectify is done, True when some rectify is done)
+	global new_dir_nm
+	bin_image = neighbors.fn_image_n8(new_dir_nm,'03_binary.txt')
+
+def f_04_next():
+	notebook.select(frame5)
+
+bt_04_binary = Button(frame4, text="Neighbors", width=10, overrelief="solid", command= f_04_neighbors)
+bt_04_binary.pack(side="bottom", anchor="w")
+
+bt_04_next = Button(frame4, text="Next", width=10, overrelief="solid", command= f_04_next)
+bt_04_next.pack(side="bottom", anchor="e")
+
+
+
+
+# frame. 5
+frame5 = Frame(root)
+notebook.add(frame5, text="5: Vetorize")
+
+# frame. 6
+frame6 = Frame(root)
+notebook.add(frame6, text="6: Filter")
 
 root.mainloop()
