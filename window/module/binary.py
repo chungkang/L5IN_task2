@@ -23,8 +23,8 @@ def fn_binary(datapath,imagename,rectify):
             else:
                 bin_image[i,j] = 0#np.array([0, 0, 0], dtype=np.float32)
     
-    # bin_image_file = '%s/Binaer/%s_binaer.jpg' % (datapath,imagename)#save binary image
-    # plt.imsave(bin_image_file,bin_image)
+    bin_image_file = '%s\\03_binary.png' % (datapath)#save binary code
+    plt.imsave(bin_image_file,bin_image)
     bin_image_file = '%s\\03_binary.txt' % (datapath)#save binary code
     np.savetxt(bin_image_file,bin_image, delimiter=';')
     

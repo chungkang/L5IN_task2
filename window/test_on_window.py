@@ -57,7 +57,7 @@ def file_find():
 		image_height = int(float(frame1_new_image.size[1])*float(image_percent))
 		frame1_new_image = frame1_new_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
 		frame1_new_photo = ImageTk.PhotoImage(frame1_new_image)
-		frame1_image_label.config(image=frame1_new_photo)
+		frame1_image_label.configure(image=frame1_new_photo)
 
 def f_01_next():
 	# only the first time at frame1 make new directory
@@ -88,7 +88,7 @@ def f_01_next():
 	image_height = int(float(frame2_new_image.size[1])*float(image_percent))
 	frame2_new_image = frame2_new_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
 	frame2_new_photo = ImageTk.PhotoImage(frame2_new_image)
-	frame2_image_label.config(image=frame2_new_photo)
+	frame2_image_label.configure(image=frame2_new_photo)
 	
 	notebook.select(frame2)
 	frame1_count += 1
@@ -212,7 +212,7 @@ def f_02_rectify():
 	image_height = int(float(frame2_rectify_image.size[1])*float(image_percent))
 	frame2_rectify_image = frame2_rectify_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
 	frame2_rectify_photo = ImageTk.PhotoImage(frame2_rectify_image)
-	frame2_image_label.config(image=frame2_rectify_photo)
+	frame2_image_label.configure(image=frame2_rectify_photo)
 	
 	notebook.select(frame2)
 
@@ -238,7 +238,7 @@ def f_03_binary():
 	bin_image = binary.fn_binary(new_dir_nm,'02_rectify.png',True)
 
 def f_03_next():
-	notebook.select(frame4)
+	notebook.select(frame4)	
 
 bt_03_binary = Button(frame3, text="Binary", width=10, overrelief="solid", command= f_03_binary)
 bt_03_binary.pack(side="bottom", anchor="w")
@@ -248,7 +248,7 @@ bt_03_next.pack(side="bottom", anchor="e")
 
 # frame. 4
 frame4 = Frame(root)
-notebook.add(frame4, text="4: Neighbors")
+notebook.add(frame4, text="4")
 
 def f_04_neighbors():
 	# transforme to an binary image (False if no rectify is done, True when some rectify is done)
@@ -264,15 +264,12 @@ bt_04_binary.pack(side="bottom", anchor="w")
 bt_04_next = Button(frame4, text="Next", width=10, overrelief="solid", command= f_04_next)
 bt_04_next.pack(side="bottom", anchor="e")
 
-
-
-
 # frame. 5
 frame5 = Frame(root)
-notebook.add(frame5, text="5: Vetorize")
+notebook.add(frame5, text="5")
 
 # frame. 6
 frame6 = Frame(root)
-notebook.add(frame6, text="6: Filter")
+notebook.add(frame6, text="6")
 
 root.mainloop()
