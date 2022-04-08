@@ -1,10 +1,6 @@
 from tkinter import *
-from tkinter import (
-		messagebox, filedialog
-	)
 import tkinter.ttk
 import os
-from PIL import Image,ImageTk
 import PIL
 from datetime import datetime
 import cv2
@@ -43,18 +39,18 @@ frame2_control_points = ''
 
 def file_find():
 	image_ext = r"*.jpg *.jpeg *.png"
-	file = filedialog.askopenfilenames(filetypes=(("Image file",image_ext),("all file", "*.*")), initialdir=current_path)
+	file = tkinter.filedialog.askopenfilenames(filetypes=(("Image file",image_ext),("all file", "*.*")), initialdir=current_path)
 	en_filepath.delete(0,END)
 	en_filepath.insert(END, file[0])
 
 	if en_filepath:
 		global frame1_new_photo
 		fixed_width = 700
-		frame1_new_image = Image.open(en_filepath.get())
+		frame1_new_image = PIL.Image.open(en_filepath.get())
 		image_percent = (fixed_width / float(frame1_new_image.size[0]))
 		image_height = int(float(frame1_new_image.size[1])*float(image_percent))
 		frame1_new_image = frame1_new_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
-		frame1_new_photo = ImageTk.PhotoImage(frame1_new_image)
+		frame1_new_photo = PIL.ImageTk.PhotoImage(frame1_new_image)
 		frame1_image_label.configure(image=frame1_new_photo)
 
 def f_01_next():
@@ -77,11 +73,11 @@ def f_01_next():
 	# frame2에 이미지 띄워주기 - 해당 디렉토리에 있는 파일 사용
 	fixed_width = 700
 	global frame2_new_photo
-	frame2_new_image = Image.open(en_filepath.get())
+	frame2_new_image = PIL.Image.open(en_filepath.get())
 	image_percent = (fixed_width / float(frame2_new_image.size[0]))
 	image_height = int(float(frame2_new_image.size[1])*float(image_percent))
 	frame2_new_image = frame2_new_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
-	frame2_new_photo = ImageTk.PhotoImage(frame2_new_image)
+	frame2_new_photo = PIL.ImageTk.PhotoImage(frame2_new_image)
 	frame2_image_label.configure(image=frame2_new_photo)
 	
 	notebook.select(frame2)
@@ -100,11 +96,11 @@ bt_01_next = Button(frame1, text="Next", width=10, overrelief="solid", command= 
 bt_01_next.pack(side="bottom", anchor="e")
 
 fixed_width = 700
-frame1_image = Image.open("window\\a.png")
+frame1_image = PIL.Image.open("window\\a.png")
 image_percent = (fixed_width / float(frame1_image.size[0]))
 image_height = int(float(frame1_image.size[1])*float(image_percent))
 frame1_image = frame1_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
-photo = ImageTk.PhotoImage(frame1_image)
+photo = PIL.ImageTk.PhotoImage(frame1_image)
 frame1_image_label = Label(frame1, image=photo)
 frame1_image_label.pack()
 
@@ -169,11 +165,11 @@ control_description = Label(frame2, width=100, text="ex) 1000;200 (x;y)")
 control_description.grid(row=5, column=0, columnspan=4)
 
 fixed_width = 700
-frame2_image = Image.open("window\\a.png")
+frame2_image = PIL.Image.open("window\\a.png")
 image_percent = (fixed_width / float(frame2_image.size[0]))
 image_height = int(float(frame2_image.size[1])*float(image_percent))
 frame2_image = frame2_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
-frame2_photo = ImageTk.PhotoImage(frame2_image)
+frame2_photo = PIL.ImageTk.PhotoImage(frame2_image)
 frame2_image_label = Label(frame2, image=frame2_photo)
 frame2_image_label.grid(row=6, column=0, columnspan=4, sticky=W+E+N+S)
 
@@ -184,6 +180,14 @@ value1.grid(row=7, column=3)
 value2 = Entry(frame2, width=20)
 value2.insert(0, "-2500")
 value2.grid(row=7, column=4)
+
+def getorigin(eventorigin):
+    global x,y
+    x = eventorigin.x
+    y = eventorigin.y
+    tkinter.messagebox.showinfo("x y coordinate", 'x: %s  y: %s' % (x,y) )
+
+frame2_image_label.bind("<Button 1>",getorigin)
 
 def f_02_rectify():
 	global frame2_image_points
@@ -198,11 +202,11 @@ def f_02_rectify():
 	# new rectify image to frame2
 	fixed_width = 700
 	global frame2_new_photo
-	frame2_rectify_image = Image.open('%s\\%s' % (new_dir_nm, '02_rectify.png'))
+	frame2_rectify_image = PIL.Image.open('%s\\%s' % (new_dir_nm, '02_rectify.png'))
 	image_percent = (fixed_width / float(frame2_rectify_image.size[0]))
 	image_height = int(float(frame2_rectify_image.size[1])*float(image_percent))
 	frame2_rectify_image = frame2_rectify_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
-	frame2_rectify_photo = ImageTk.PhotoImage(frame2_rectify_image)
+	frame2_rectify_photo = PIL.ImageTk.PhotoImage(frame2_rectify_image)
 	frame2_image_label.configure(image=frame2_rectify_photo)
 	
 	notebook.select(frame2)
