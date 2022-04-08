@@ -8,6 +8,7 @@ import cv2
 import module.rectify as rectify
 import module.binary as binary
 import module.neighbors as neighbors
+from module.scrollimage import ScrollableImage   
 
 current_path = os.path.dirname(os.path.realpath(__file__)) #파일 경로
 
@@ -163,6 +164,12 @@ control_point_4.grid(row=4, column=3)
 
 control_description = Label(frame2, width=100, text="ex) 1000;200 (x;y)")
 control_description.grid(row=5, column=0, columnspan=4)
+
+# # scrollable image
+# frame2_image = PIL.Image.open("window\\a.png")
+# frame2_photo = PIL.ImageTk.PhotoImage(frame2_image)
+# frame2_image_label = ScrollableImage(frame2, image=frame2_photo, scrollbarwidth=6, width=700, height=500)
+# frame2_image_label.grid(row=6, column=0, columnspan=4, sticky=W+E+N+S)
 
 fixed_width = 700
 frame2_image = PIL.Image.open("window\\a.png")
