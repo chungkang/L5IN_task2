@@ -35,8 +35,6 @@ frame1 = Frame(root)
 notebook.add(frame1, text="1: Selecting Image")
 
 # frame1 functions
-# rectify_yn = StringVar()
-rectify_yn = 0	# image rectify done yn
 frame1_count = 0	# frame1 process count
 new_dir_nm = current_path	# using directory name
 frame1_save_image = ''	# frame1's image path
@@ -71,10 +69,6 @@ def f_01_next():
 
 	image_name = "01_original"
 
-	global rectify_yn
-	if rectify_yn == 1:
-		image_name += "-rectify"
-
 	frame1_img = cv2.imread(en_filepath.get())
 	global frame1_save_image
 	frame1_save_image = new_dir_nm + "\\" +image_name + ".png"
@@ -101,9 +95,6 @@ en_filepath.pack(side="top", anchor="w")
 
 bt_find = Button(frame1, text="Find", width=10, command= file_find)
 bt_find.pack(side="top", anchor="e")
-
-Radiobutton(frame1, text = "Yes", variable = rectify_yn, value = 1).pack(side = "top", ipady = 5)
-Radiobutton(frame1, text = "No", variable = rectify_yn, value = 0).pack(side = "top", ipady = 5)
 
 bt_01_next = Button(frame1, text="Next", width=10, overrelief="solid", command= f_01_next)
 bt_01_next.pack(side="bottom", anchor="e")
