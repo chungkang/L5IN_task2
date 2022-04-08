@@ -109,7 +109,7 @@ bt_01_next = Button(frame1, text="Next", width=10, overrelief="solid", command= 
 bt_01_next.pack(side="bottom", anchor="e")
 
 fixed_width = 700
-frame1_image = Image.open("task2_window\\a.png")
+frame1_image = Image.open("window\\a.png")
 image_percent = (fixed_width / float(frame1_image.size[0]))
 image_height = int(float(frame1_image.size[1])*float(image_percent))
 frame1_image = frame1_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
@@ -178,7 +178,7 @@ control_description = Label(frame2, width=100, text="ex) 1000;200 (x;y)")
 control_description.grid(row=5, column=0, columnspan=4)
 
 fixed_width = 700
-frame2_image = Image.open("task2_window\\a.png")
+frame2_image = Image.open("window\\a.png")
 image_percent = (fixed_width / float(frame2_image.size[0]))
 image_height = int(float(frame2_image.size[1])*float(image_percent))
 frame2_image = frame2_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
