@@ -80,6 +80,12 @@ def f_01_next():
 	frame2_new_image = frame2_new_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
 	frame2_new_photo = PIL.ImageTk.PhotoImage(frame2_new_image)
 	frame2_image_label.configure(image=frame2_new_photo)
+
+	# global frame2_new_photo
+	# frame2_new_image = PIL.Image.open(en_filepath.get())
+	# frame2_new_photo = PIL.ImageTk.PhotoImage(frame2_new_image)
+	# frame2_image_label.configure(image=frame2_new_photo)
+
 	
 	notebook.select(frame2)
 	frame1_count += 1
@@ -165,7 +171,7 @@ control_point_4.grid(row=4, column=3)
 control_description = Label(frame2, width=100, text="ex) 1000;200 (x;y)")
 control_description.grid(row=5, column=0, columnspan=4)
 
-# # scrollable image
+# scrollable image
 # frame2_image = PIL.Image.open("window\\a.png")
 # frame2_photo = PIL.ImageTk.PhotoImage(frame2_image)
 # frame2_image_label = ScrollableImage(frame2, image=frame2_photo, scrollbarwidth=6, width=700, height=500)
@@ -196,6 +202,7 @@ def getorigin(eventorigin):
 
 frame2_image_label.bind("<Button 1>",getorigin)
 
+
 def f_02_rectify():
 	global frame2_image_points
 	frame2_image_points = str(image_point_1.get()) + "\n" + str(image_point_2.get()) + "\n" + str(image_point_3.get()) + "\n" + str(image_point_4.get())
@@ -215,7 +222,11 @@ def f_02_rectify():
 	frame2_rectify_image = frame2_rectify_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
 	frame2_rectify_photo = PIL.ImageTk.PhotoImage(frame2_rectify_image)
 	frame2_image_label.configure(image=frame2_rectify_photo)
-	
+
+	# frame2_rectify_image = PIL.Image.open('%s\\%s' % (new_dir_nm, '02_rectify.png'))
+	# frame2_rectify_photo = PIL.ImageTk.PhotoImage(frame2_rectify_image)
+	# frame2_image_label.configure(image=frame2_rectify_photo)
+
 	notebook.select(frame2)
 
 def f_02_next():
