@@ -103,7 +103,7 @@ bt_01_next = Button(frame1, text="Next", width=10, overrelief="solid", command= 
 bt_01_next.pack(side="bottom", anchor="e")
 
 fixed_width = 700
-frame1_image = PIL.Image.open("window\\a.png")
+frame1_image = PIL.Image.open("a.png")
 image_percent = (fixed_width / float(frame1_image.size[0]))
 image_height = int(float(frame1_image.size[1])*float(image_percent))
 frame1_image = frame1_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
@@ -172,13 +172,13 @@ control_description = Label(frame2, width=100, text="ex) 1000;200 (x;y)")
 control_description.grid(row=5, column=0, columnspan=4)
 
 # scrollable image
-# frame2_image = PIL.Image.open("window\\a.png")
+# frame2_image = PIL.Image.open("a.png")
 # frame2_photo = PIL.ImageTk.PhotoImage(frame2_image)
 # frame2_image_label = ScrollableImage(frame2, image=frame2_photo, scrollbarwidth=6, width=700, height=500)
 # frame2_image_label.grid(row=6, column=0, columnspan=4, sticky=W+E+N+S)
 
 fixed_width = 700
-frame2_image = PIL.Image.open("window\\a.png")
+frame2_image = PIL.Image.open("a.png")
 image_percent = (fixed_width / float(frame2_image.size[0]))
 image_height = int(float(frame2_image.size[1])*float(image_percent))
 frame2_image = frame2_image.resize((fixed_width, image_height), PIL.Image.NEAREST)

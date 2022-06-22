@@ -73,7 +73,7 @@ class App:
         Radiobutton(self.frame1, text = "No", variable = self.rectify_yn, value = 0).pack(side = "top", ipady = 5)
 
         self.fixed_width = 700
-        self.frame1_image = Image.open("window\\a.png")
+        self.frame1_image = Image.open("a.png")
         self.image_percent = (self.fixed_width / float(self.frame1_image.size[0]))
         self.image_height = int(float(self.frame1_image.size[1])*float(self.image_percent))
         self.frame1_image = self.frame1_image.resize((self.fixed_width, self.image_height), PIL.Image.NEAREST)
@@ -87,7 +87,7 @@ class App:
         # self.bt_find = Button(self.frame1, text="Find", width=10, command= self.file_find(self.current_path, self.en_filepath, self.frame1_image_label))
         # self.bt_find.pack(side="top", anchor="e")
 
-        self.bt_01_next = Button(self.frame1, text="Next", width=10, overrelief="solid", command= self.f_01_next(self.en_filepath, self.frame2_image_label, self.notebook, self.frame2))
+        self.bt_01_next = Button(self.frame1, text="Next", width=10, overrelief="solid", command= self.f_01_next(self.en_filepath, self.frame1_image_label, self.notebook, self.frame2))
         self.bt_01_next.pack(side="bottom", anchor="e")
 
 
@@ -149,7 +149,7 @@ class App:
         self.control_description.grid(row=5, column=0, columnspan=4)
 
         self.fixed_width = 700
-        self.frame2_image = Image.open("window\\a.png")
+        self.frame2_image = Image.open("a.png")
         self.image_percent = (self.fixed_width / float(self.frame2_image.size[0]))
         self.image_height = int(float(self.frame2_image.size[1])*float(self.image_percent))
         self.frame2_image = self.frame2_image.resize((self.fixed_width, self.image_height), PIL.Image.NEAREST)
