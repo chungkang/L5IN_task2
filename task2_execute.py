@@ -26,7 +26,7 @@ def image_find():
 	en_filepath.delete(0,tk.END)
 	en_filepath.insert(tk.END, file[0])
 
-def popup_image():
+def popup_origin_image():
     win_image = tk.Toplevel()
     win_image.wm_title("1. Image")
 
@@ -40,12 +40,20 @@ def popup_image():
     label1.image = photo1
     label1.grid(row=0, column=0)
 
-def popup_rectify():
+def rectify_image():
+    image_points = str(image_point_1.get()) + "\n" + str(image_point_2.get()) + "\n" + str(image_point_3.get()) + "\n" + str(image_point_4.get())
+    control_points = str(control_point_1.get()) + "\n" + str(control_point_2.get()) + "\n" + str(control_point_3.get()) + "\n" + str(control_point_4.get())
+
+    # rectify image
+    new_dir_nm = ''
+    e_image = rectify.fn_rectify(new_dir_nm,en_filepath.get(),image_points,control_points,value1.get(),value2.get())
+
+def popup_rectify_image():
     win_rectify = tk.Toplevel()
     win_rectify.wm_title("2. Rectify")
 
     fixed_width = 600
-    image1 = PIL.Image.open(en_filepath.get())
+    image1 = PIL.Image.open('02_rectify.png')
     image_percent = (fixed_width/float(image1.size[0]))
     image_height = int(float(image1.size[1])*float(image_percent))
     image1 = image1.resize((fixed_width, image_height), PIL.Image.NEAREST)
@@ -53,29 +61,6 @@ def popup_rectify():
     label1 = tk.Label(win_rectify, image=photo1)
     label1.image = photo1
     label1.grid(row=6, column=0, columnspan=4)
-
-    image_points = str(image_point_1.get()) + "\n" + str(image_point_2.get()) + "\n" + str(image_point_3.get()) + "\n" + str(image_point_4.get())
-    control_points = str(control_point_1.get()) + "\n" + str(control_point_2.get()) + "\n" + str(control_point_3.get()) + "\n" + str(control_point_4.get())
-
-    tk.Button(win_rectify, text="Retify", width=10, command=image_rectify(en_filepath.get(),image_points,control_points,value1.get(),value2.get())).grid(row=7, column=4)
-
-
-def image_rectify(image_path, p_image_points, p_control_points, p_value1, p_value2):
-	# rectify image
-	new_dir_nm = ''
-	e_image = rectify.fn_rectify(new_dir_nm,image_path,p_image_points,p_control_points,p_value1,p_value2)
-
-	# new rectify image to frame2
-	fixed_width = 700
-	# global frame2_new_photo
-	# frame2_rectify_image = PIL.Image.open('%s\\%s' % (new_dir_nm, '02_rectify.png'))
-	# frame2_rectify_image = PIL.Image.open('02_rectify.png')
-	# image_percent = (fixed_width / float(frame2_rectify_image.size[0]))
-	# image_height = int(float(frame2_rectify_image.size[1])*float(image_percent))
-	# frame2_rectify_image = frame2_rectify_image.resize((fixed_width, image_height), PIL.Image.NEAREST)
-	# frame2_rectify_photo = PIL.ImageTk.PhotoImage(frame2_rectify_image)
-	# win_rectify.label1.configure(image=frame2_rectify_photo)
-
 
 def popup_binarization():
     win = tk.Toplevel()
@@ -114,15 +99,15 @@ en_filepath.grid(row=0,column=1,columnspan=3)
 
 tk.Button(root, text="Find", width=10, command=image_find).grid(row=0,column=4)
 
-tk.Button(root, text="Show Image", width=10, command=popup_image).grid(row=0,column=5)
+tk.Button(root, text="Show Image", width=10, command=popup_origin_image).grid(row=0,column=5)
 
 
 # 2. Rectify - popup image show
 tk.Label(root, text="2. Rectify").grid(row=1,column=0)
 
-tk.Button(root, text="Rectify", width=10, command=popup_rectify).grid(row=1,column=4)
+tk.Button(root, text="Rectify", width=10, command=rectify_image).grid(row=1,column=4)
 
-# tk.Button(root, text="Show Image", width=10, command=popup_image).grid(row=1,column=5)
+tk.Button(root, text="Show Image", width=10, command=popup_rectify_image).grid(row=1,column=5)
 
 
 image_point_1_nm = tk.Label(root, width=20, text="Image Point 1: ")
