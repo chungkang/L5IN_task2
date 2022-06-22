@@ -32,7 +32,8 @@ def fn_read_points (image_points,control_points):
 
 
 def fn_rectify (datapath,imagename,image_points,control_points,plus_rows,plus_cols):
-    image_file = '%s\\%s' % (datapath,imagename)
+    # image_file = '%s\\%s' % (datapath,imagename)
+    image_file = imagename
     print(image_file)
     image = plt.imread(image_file)#open the image file
     rows, cols = image.shape[:2]#get the size of the image
@@ -44,7 +45,8 @@ def fn_rectify (datapath,imagename,image_points,control_points,plus_rows,plus_co
     M = cv2.getPerspectiveTransform(imagepoints[0:4],controlpoints[0:4])#calculate the transformation matrix
     e_image = cv2.warpPerspective(image,M,(rows+int(plus_rows),cols+int(plus_cols)))#calculate the new image
     
-    e_image_file = '%s\\02_rectify.png' % (datapath)#save transformed image
+    # e_image_file = '%s\\02_rectify.png' % (datapath)#save transformed image
+    e_image_file = '02_rectify.png'
     plt.imsave(e_image_file,e_image)
     
     return e_image
