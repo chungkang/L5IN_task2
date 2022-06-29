@@ -40,6 +40,14 @@ def popup_origin_image():
     label1.image = photo1
     label1.grid(row=0, column=0)
 
+    label1.bind("get_coordinate",getorigin)
+
+def getorigin(eventorigin):
+    global x,y
+    x = eventorigin.x
+    y = eventorigin.y
+    tk.messagebox.showinfo("x y coordinate", 'x: %s  y: %s' % (x,y) )
+
 def rectify_image():
     image_points = str(image_point_1.get()) + "\n" + str(image_point_2.get()) + "\n" + str(image_point_3.get()) + "\n" + str(image_point_4.get())
     control_points = str(control_point_1.get()) + "\n" + str(control_point_2.get()) + "\n" + str(control_point_3.get()) + "\n" + str(control_point_4.get())
@@ -62,15 +70,23 @@ def popup_rectify_image():
     label1.image = photo1
     label1.grid(row=6, column=0, columnspan=4)
 
-def popup_binarization():
-    win = tk.Toplevel()
-    win.wm_title("3. Binarization")
+def binarization_image():
+    new_dir_nm = ''
+    bin_image = binary.fn_binary(new_dir_nm,'02_rectify.png',True)
 
-    l = tk.Label(win, text="Input")
-    l.grid(row=0, column=0)
+def popup_binarization_image():
+    win_rectify = tk.Toplevel()
+    win_rectify.wm_title("3. Binarization")
 
-    b = ttk.Button(win, text="Okay", command=win.destroy)
-    b.grid(row=1, column=0)
+    fixed_width = 600
+    image1 = PIL.Image.open('03_binary.png')
+    image_percent = (fixed_width/float(image1.size[0]))
+    image_height = int(float(image1.size[1])*float(image_percent))
+    image1 = image1.resize((fixed_width, image_height), PIL.Image.NEAREST)
+    photo1 = PIL.ImageTk.PhotoImage(image1)
+    label1 = tk.Label(win_rectify, image=photo1)
+    label1.image = photo1
+    label1.grid(row=6, column=0, columnspan=4)
 
 def neighbor():
     print('neighbor')
@@ -92,9 +108,9 @@ root.columnconfigure(5, weight=1)
 
 
 # 1. Select Image - popup image show
-tk.Label(root, text="1. Select Image: ").grid(row=0,column=0)
+tk.Label(root, text="1. Select Image: ").grid(row=0,column=0,sticky=tk.W)
 
-en_filepath = tk.Entry(root)
+en_filepath = tk.Entry(root)    
 en_filepath.grid(row=0,column=1,columnspan=3)
 
 tk.Button(root, text="Find", command=image_find).grid(row=0,column=4)
@@ -103,7 +119,7 @@ tk.Button(root, text="Show Image", command=popup_origin_image).grid(row=0,column
 
 
 # 2. Rectify - popup image show
-tk.Label(root, text="2. Rectify").grid(row=1,column=0)
+tk.Label(root, text="2. Rectify").grid(row=1,column=0,sticky=tk.W)
 
 tk.Button(root, text="Rectify", command=rectify_image).grid(row=1,column=4)
 
@@ -181,20 +197,20 @@ value2.insert(0, "-2500")
 value2.grid(row=6, column=4)
 
 # 3. Binarization - popup image show
-tk.Label(root, text="3. Binarization").grid(row=7,column=0)
-tk.Button(root, text="Binarization", command=popup_binarization).grid(row=7,column=4)
-# tk.Button(root, text="Binarization", width=10, command=popup_binarization).grid(row=7,column=5)
+tk.Label(root, text="3. Binarization").grid(row=7,column=0,sticky=tk.W)
+tk.Button(root, text="Binarization", command=binarization_image).grid(row=7,column=4)
+tk.Button(root, text="Show Image", command=popup_binarization_image).grid(row=7,column=5)
 
 # 4. Neighbor - popup image show
-tk.Label(root, text="4. Neighbor").grid(row=8,column=0)
+tk.Label(root, text="4. Neighbor").grid(row=8,column=0,sticky=tk.W)
 tk.Button(root, text="Neighbor", command=neighbor).grid(row=8,column=4)
 
 # 5. Vetorize - popup image show
-tk.Label(root, text="5. Vetorize").grid(row=9,column=0)
+tk.Label(root, text="5. Vetorize").grid(row=9,column=0,sticky=tk.W)
 tk.Button(root, text="Vetorize", command=vectorize).grid(row=9,column=4)
 
 # 6. Filtering - popup image show
-tk.Label(root, text="6. Filtering").grid(row=10,column=0)
+tk.Label(root, text="6. Filtering").grid(row=10,column=0,sticky=tk.W)
 tk.Button(root, text="Filtering", command=filtering).grid(row=10,column=4)
 
 root.mainloop()

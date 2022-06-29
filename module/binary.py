@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def fn_binary(datapath,imagename,rectify):
-    image_file = '%s\\%s' % (datapath,imagename)
+    # image_file = '%s\\%s' % (datapath,imagename)
+    image_file = imagename
     image = plt.imread(image_file)#open transformed image
 
     rows, cols = image.shape[:2]#get size of the image
@@ -23,9 +24,11 @@ def fn_binary(datapath,imagename,rectify):
             else:
                 bin_image[i,j] = 0#np.array([0, 0, 0], dtype=np.float32)
     
-    bin_image_file = '%s\\03_binary.png' % (datapath)#save binary code
+    # bin_image_file = '%s\\03_binary.png' % (datapath)#save binary code
+    bin_image_file = '03_binary.png' #save binary code
     plt.imsave(bin_image_file,bin_image)
-    bin_image_file = '%s\\03_binary.txt' % (datapath)#save binary code
+    # bin_image_file = '%s\\03_binary.txt' % (datapath)#save binary code
+    bin_image_file = '03_binary.txt'#save binary code
     np.savetxt(bin_image_file,bin_image, delimiter=';')
     
     return bin_image

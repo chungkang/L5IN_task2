@@ -1,9 +1,9 @@
 import cv2
 import matplotlib.pyplot as plt
 
-# img = cv2.imread("IMG_3753.JPG")
-img = cv2.imread("EG2.PNG")
-img = cv2.resize(img, (1000,500))
+img = cv2.imread("IMG_3753.JPG")
+# img = cv2.imread("EG2.PNG")
+# img = cv2.resize(img, (1000,500))
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 gray_gau = cv2.GaussianBlur(gray, (7,7), 0)
