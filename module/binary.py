@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def fn_binary(datapath,imagename,rectify):
+def fn_binary(datapath,imagename,rectify,rgb_param,sum_pixel):
     # image_file = '%s\\%s' % (datapath,imagename)
     image_file = imagename
     image = plt.imread(image_file)#open transformed image
@@ -15,11 +15,11 @@ def fn_binary(datapath,imagename,rectify):
         
             pixel[0,0,0:3] = image[i,j,0:3]#get the RGB-values for the pixel
             # print(np.max(image[i,j,:]))
-            if (np.max(image[i,j,:]) - np.min(image[i,j,:])) > 15:#eliminate red green and blue (only for IMG_20191015_181243)
+            if (np.max(image[i,j,:]) - np.min(image[i,j,:])) > int(rgb_param):#eliminate red green and blue (only for IMG_20191015_181243)
                 pixel[0,0,0:3] = np.array([255, 255, 255], dtype=np.float32)
                 # print(pixel)
             # print(np.sum(pixel)-sum(image[i,j,0:3]))  
-            if np.sum(pixel) > 100:#transform to binary data (only for IMG_20191015_181243)
+            if np.sum(pixel) > int(sum_pixel):#transform to binary data (only for IMG_20191015_181243)
                 bin_image[i,j] = 1#np.array([1, 1, 1], dtype=np.float32)
             else:
                 bin_image[i,j] = 0#np.array([0, 0, 0], dtype=np.float32)

@@ -32,6 +32,7 @@ def popup_origin_image():
 
     fixed_width = 600
     image1 = PIL.Image.open(en_filepath.get())
+    global image_percent
     image_percent = (fixed_width/float(image1.size[0]))
     image_height = int(float(image1.size[1])*float(image_percent))
     image1 = image1.resize((fixed_width, image_height), PIL.Image.NEAREST)
@@ -40,12 +41,12 @@ def popup_origin_image():
     label1.image = photo1
     label1.grid(row=0, column=0)
 
-    label1.bind("get_coordinate",getorigin)
+    label1.bind("<Button 1>", getorigin)
 
 def getorigin(eventorigin):
     global x,y
-    x = eventorigin.x
-    y = eventorigin.y
+    x = int(eventorigin.x/image_percent)
+    y = int(eventorigin.y/image_percent)
     tk.messagebox.showinfo("x y coordinate", 'x: %s  y: %s' % (x,y) )
 
 def rectify_image():
@@ -72,7 +73,7 @@ def popup_rectify_image():
 
 def binarization_image():
     new_dir_nm = ''
-    bin_image = binary.fn_binary(new_dir_nm,'02_rectify.png',True)
+    bin_image = binary.fn_binary(new_dir_nm,'02_rectify.png',True,value_rgb.get(),value_sum_pixel.get())
 
 def popup_binarization_image():
     win_rectify = tk.Toplevel()
@@ -185,7 +186,7 @@ control_point_4.insert(0, "4075;880")
 control_point_4.grid(row=5, column=4, columnspan=2)
 
 
-control_description = tk.Label(root, text="ex) 1000;200 (x;y)")
+control_description = tk.Label(root, text="result image size adjust ex) 1000;200")
 control_description.grid(row=6, column=0, columnspan=3)
 
 value1 = tk.Entry(root)
@@ -193,11 +194,20 @@ value1.insert(0, "1000")
 value1.grid(row=6, column=3)
 
 value2 = tk.Entry(root)
-value2.insert(0, "-2500")
+value2.insert(0, "-3000")
 value2.grid(row=6, column=4)
 
 # 3. Binarization - popup image show
 tk.Label(root, text="3. Binarization").grid(row=7,column=0,sticky=tk.W)
+
+tk.Label(root, text="RGB/Sum pixel").grid(row=7, column=1)
+value_rgb = tk.Entry(root)
+value_rgb.insert(0, "15")
+value_rgb.grid(row=7, column=2)
+value_sum_pixel = tk.Entry(root)
+value_sum_pixel.insert(0, "100")
+value_sum_pixel.grid(row=7, column=3)
+
 tk.Button(root, text="Binarization", command=binarization_image).grid(row=7,column=4)
 tk.Button(root, text="Show Image", command=popup_binarization_image).grid(row=7,column=5)
 
