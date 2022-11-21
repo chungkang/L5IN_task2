@@ -16,7 +16,7 @@ current_path = os.path.dirname(os.path.realpath(__file__)) #파일 경로
 # Settings
 root = tk.Tk()
 root.title("Map Generator from Rescue Plans")
-root.geometry("600x400")
+root.geometry("700x400")
 # root.resizable(False, False)
 
 
@@ -32,6 +32,7 @@ def popup_origin_image():
 
     fixed_width = 600
     image1 = PIL.Image.open(en_filepath.get())
+    global image_percent
     image_percent = (fixed_width/float(image1.size[0]))
     image_height = int(float(image1.size[1])*float(image_percent))
     image1 = image1.resize((fixed_width, image_height), PIL.Image.NEAREST)
@@ -40,12 +41,12 @@ def popup_origin_image():
     label1.image = photo1
     label1.grid(row=0, column=0)
 
-    label1.bind("get_coordinate",getorigin)
+    label1.bind("<Button 1>", getorigin)
 
 def getorigin(eventorigin):
     global x,y
-    x = eventorigin.x
-    y = eventorigin.y
+    x = int(eventorigin.x/image_percent)
+    y = int(eventorigin.y/image_percent)
     tk.messagebox.showinfo("x y coordinate", 'x: %s  y: %s' % (x,y) )
 
 def rectify_image():
@@ -72,7 +73,7 @@ def popup_rectify_image():
 
 def binarization_image():
     new_dir_nm = ''
-    bin_image = binary.fn_binary(new_dir_nm,'02_rectify.png',True)
+    bin_image = binary.fn_binary(new_dir_nm,'02_rectify.png',True,value_rgb.get(),value_sum_pixel.get())
 
 def popup_binarization_image():
     win_rectify = tk.Toplevel()
@@ -88,8 +89,23 @@ def popup_binarization_image():
     label1.image = photo1
     label1.grid(row=6, column=0, columnspan=4)
 
+
+def binarization_test():
+    # https://note.nkmk.me/en/python-numpy-opencv-image-binarization/
+    im = cv2.imread('02_rectify.png')
+    # retval, dst = cv2.threshold(src, thresh, maxval, type)
+    # cv2.THRESH_BINARY - value greater than the thresh is replaced with maxval and the other values are replaced with 0.
+    # cv2.THRESH_TOZERO - value greater than the thresh remains the same, and the other values are replaced with 0.
+    # cv2.THRESH_OTSU - the threshold is automatically selected by the Otsu's method
+    # cv2.THRESH_TRIANGLE - the threshold is automatically selected by the triangle method.
+    th, im_th = cv2.threshold(im, 128, 255, cv2.THRESH_OTSU)
+    cv2.imwrite('03_bin_test.jpg', im_th)
+
+def popup_binarization_test():
+    print()
+
 def neighbor():
-    print('neighbor')
+	bin_image = neighbors.fn_image_n8("",'03_binary.txt')
 
 def vectorize():
     print('vectorize')
@@ -145,7 +161,7 @@ image_point_2_nm = tk.Label(root, text="Image Point 2: ")
 image_point_2_nm.grid(row=3, column=0)
 
 image_point_2 = tk.Entry(root)
-image_point_2.insert(0, "403;1580")
+image_point_2.insert(0, "403;1907")
 image_point_2.grid(row=3, column=1, columnspan=2)
 
 control_point_2_nm = tk.Label(root, text="Control Point 2: ")
@@ -174,7 +190,7 @@ image_point_4_nm = tk.Label(root, text="Image Point 4: ")
 image_point_4_nm.grid(row=5, column=0)
 
 image_point_4 = tk.Entry(root)
-image_point_4.insert(0, "3833;1590")
+image_point_4.insert(0, "3833;1824")
 image_point_4.grid(row=5, column=1, columnspan=2)
 
 control_point_4_nm = tk.Label(root, text="Control Point 4: ")
@@ -185,11 +201,11 @@ control_point_4.insert(0, "4075;880")
 control_point_4.grid(row=5, column=4, columnspan=2)
 
 
-control_description = tk.Label(root, text="ex) 1000;200 (x;y)")
+control_description = tk.Label(root, text="result image size adjust ex) 1000;200")
 control_description.grid(row=6, column=0, columnspan=3)
 
 value1 = tk.Entry(root)
-value1.insert(0, "1000")
+value1.insert(0, "1100")
 value1.grid(row=6, column=3)
 
 value2 = tk.Entry(root)
@@ -198,19 +214,33 @@ value2.grid(row=6, column=4)
 
 # 3. Binarization - popup image show
 tk.Label(root, text="3. Binarization").grid(row=7,column=0,sticky=tk.W)
+
+tk.Label(root, text="RGB/sum").grid(row=7, column=1)
+value_rgb = tk.Entry(root)
+value_rgb.insert(0, "15")
+value_rgb.grid(row=7, column=2)
+value_sum_pixel = tk.Entry(root)
+value_sum_pixel.insert(0, "100")
+value_sum_pixel.grid(row=7, column=3)
+
 tk.Button(root, text="Binarization", command=binarization_image).grid(row=7,column=4)
 tk.Button(root, text="Show Image", command=popup_binarization_image).grid(row=7,column=5)
 
+
+tk.Button(root, text="Bin-test", command=binarization_test).grid(row=8,column=4)
+tk.Button(root, text="Show Image", command=popup_binarization_test).grid(row=8,column=5)
+
+
 # 4. Neighbor - popup image show
-tk.Label(root, text="4. Neighbor").grid(row=8,column=0,sticky=tk.W)
-tk.Button(root, text="Neighbor", command=neighbor).grid(row=8,column=4)
+tk.Label(root, text="4. Neighbor").grid(row=9,column=0,sticky=tk.W)
+tk.Button(root, text="Neighbor", command=neighbor).grid(row=9,column=4)
 
 # 5. Vetorize - popup image show
-tk.Label(root, text="5. Vetorize").grid(row=9,column=0,sticky=tk.W)
-tk.Button(root, text="Vetorize", command=vectorize).grid(row=9,column=4)
+tk.Label(root, text="5. Vetorize").grid(row=10,column=0,sticky=tk.W)
+tk.Button(root, text="Vetorize", command=vectorize).grid(row=10,column=4)
 
 # 6. Filtering - popup image show
-tk.Label(root, text="6. Filtering").grid(row=10,column=0,sticky=tk.W)
-tk.Button(root, text="Filtering", command=filtering).grid(row=10,column=4)
+tk.Label(root, text="6. Filtering").grid(row=11,column=0,sticky=tk.W)
+tk.Button(root, text="Filtering", command=filtering).grid(row=11,column=4)
 
 root.mainloop()
