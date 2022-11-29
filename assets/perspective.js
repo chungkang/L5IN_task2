@@ -1,5 +1,5 @@
 const utils = new Utils('errorMessage');
-const imageUsed = document.getElementById('output-image-upload').getAttribute('src')
+const imageUsed = document.getElementById('sample').getAttribute('src')
 console.log(imageUsed)
 const applyButton = document.getElementById('apply')
 const setUpApplyButton = function () { 

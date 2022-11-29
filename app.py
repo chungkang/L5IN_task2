@@ -39,11 +39,11 @@ app.layout = html.Div([
 def parse_contents(contents, filename, date):
     return html.Div([
         html.H5(filename),
-        html.H6(datetime.datetime.fromtimestamp(date)),
+        # html.H6(datetime.datetime.fromtimestamp(date)),
 
         # HTML images accept base64 encoded strings in the same format
         # that is supplied by the upload
-        html.Img(src=contents),
+        html.Img(id='sample', src=contents),
         # html.Hr(),
         # html.Div('Raw Content'),
         # html.Pre(contents[0:200] + '...', style={
