@@ -61,7 +61,8 @@ def update_output(list_of_contents, list_of_names, list_of_dates):
         children = [
             parse_contents(c, n, d) for c, n, d in
             zip(list_of_contents, list_of_names, list_of_dates)]
+        perspective()
         return children
-
+    
 if __name__ == '__main__':
     app.run_server(debug=True)
