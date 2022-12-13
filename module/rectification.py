@@ -12,10 +12,10 @@ References
     Intelligent Robots and Systems. IEEE, 2012.
 """
 
-from skimage import feature, color, transform, io
+from skimage import feature, color, transform, io, img_as_ubyte
 import numpy as np
 import logging
-
+import base64
 
 def compute_edgelets(image, sigma=3):
     """Create edgelets as in the paper.
@@ -468,7 +468,7 @@ def vis_model(image, model, show=True):
         plt.show()
 
 
-def rectify_image(image, clip_factor=6, algorithm='independent', 
+def rectify_image(input_image, clip_factor=6, algorithm='independent', 
                   reestimate=False):
     """Rectified image with vanishing point computed using ransac.
 
@@ -492,8 +492,9 @@ def rectify_image(image, clip_factor=6, algorithm='independent',
     warped_img: ndarray
         Rectified image.
     """
-    if type(image) is not np.ndarray:
-        image = io.imread(image)
+    if type(input_image) is not np.ndarray:
+        # image = io.imread(input_image)
+        image = img_as_ubyte(image)
 
     # Compute all edgelets.
     edgelets1 = compute_edgelets(image)
