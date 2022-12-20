@@ -13,7 +13,6 @@ from skimage import feature, color, transform, io
 import numpy as np
 import logging
 
-
 def compute_edgelets(image, sigma=3):
     """Create edgelets as in the paper.
 
@@ -529,7 +528,10 @@ if __name__ == '__main__':
     # image = io.imread(image_name)
     # print("Rectifying {}".format(image_name))
     # save_name = '.'.join(image_name.split('.')[:-1]) + '_warped.png'
-    image_name = "20221115_115049.jpg"
-    save_name = "20221115_115049" + '_warped.png'
+    
+    file_name = "module_test\\result\\20220112_162250"
+
+    image_name = file_name + ".jpg"
+    save_name = file_name + '_warped.png'
 
     io.imsave(save_name, rectify_image(image_name, 4, algorithm='independent'))
