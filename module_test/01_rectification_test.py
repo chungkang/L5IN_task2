@@ -522,6 +522,9 @@ def rectify_image(image, clip_factor=6, algorithm='independent',
     return warped_img
 
 
+
+
+
 if __name__ == '__main__':
     # import sys
     # image_name = sys.argv[-1]
@@ -535,3 +538,5 @@ if __name__ == '__main__':
     save_name = file_name + '_warped.png'
 
     io.imsave(save_name, rectify_image(image_name, 4, algorithm='independent'))
+
+
