@@ -468,7 +468,7 @@ def vis_model(image, model, show=True):
         plt.show()
 
 
-def rectify_image(input_image, clip_factor=6, algorithm='independent', 
+def rectify_image(image, clip_factor=6, algorithm='independent', 
                   reestimate=False):
     """Rectified image with vanishing point computed using ransac.
 
@@ -492,7 +492,7 @@ def rectify_image(input_image, clip_factor=6, algorithm='independent',
     warped_img: ndarray
         Rectified image.
     """
-    if type(input_image) is not np.ndarray:
+    if type(image) is not np.ndarray:
         # image = io.imread(input_image)
         image = img_as_ubyte(image)
 

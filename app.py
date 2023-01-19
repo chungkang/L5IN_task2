@@ -5,7 +5,10 @@ from io import BytesIO
 from PIL import Image
 import datetime
 import numpy as np
+from numpy import asarray
 import cv2
+import module.rectification as rectification
+
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -31,75 +34,70 @@ app.layout = html.Div([
     Output('output-image-upload', 'children'),
     # Output('image', 'figure'),
     Input('upload-image', 'contents'),
-    # Input('image', 'relayoutData'),
     State('upload-image', 'filename'),
     State('upload-image', 'last_modified'),
     Input('rectification_button', 'n_clicks'),
+    # Input('image', 'relayoutData'),
 )
 
 def update_output(content, name, date, n_clicks):
     if content is not None:
+
+
+        nparray_image = asarray(content)
+        rectified_image = rectification.rectify_image(nparray_image, clip_factor=6, algorithm='independent', reestimate=False)
+
         return html.Div([
-            html.H5(name),
-            html.H6(datetime.datetime.fromtimestamp(date)),
-            # Display the image
             dcc.Graph(
                     id='image',
                     figure={
                         'data': [{
-                            # 'x': [1],
-                            # 'y': [1],
                             'type': 'image',
-                            'source': content,
-                            # 'sizing': 'stretch'
-                        }]
-                    },
-                    style={'width': '1000px', 'height': '800px'}
+                            'source': rectified_image,
+                        }],
+                        'layout': {
+                            "height": 800
+                        },
+                    }
             ),
-            html.Hr(),
         ])
     
-    # Check if the button has been clicked
-    if n_clicks is not None:
-        print("smt")
-        return 'Script executed'
-    return 'No script executed'
+    # # Check if the button has been clicked
+    # if n_clicks is not None:
+    #     # Extract the coordinates of the selected region
+    #     x0 = relayoutData['xaxis.range[0]']
+    #     x1 = relayoutData['xaxis.range[1]']
+    #     y0 = relayoutData['yaxis.range[0]']
+    #     y1 = relayoutData['yaxis.range[1]']
 
-def update_image(relayout_data):
-    # Check if the user has selected a region to crop
-    if 'xaxis.range[0]' in relayout_data:
-        # Extract the coordinates of the selected region
-        x0 =    ['xaxis.range[0]']
-        x1 = relayout_data['xaxis.range[1]']
-        y0 = relayout_data['yaxis.range[0]']
-        y1 = relayout_data['yaxis.range[1]']
+    #     # Crop the image using the selected region
+    #     # (you'll need to write code here to actually perform the cropping)
+    #     print(x0," ",x1," ",y0," ",y1)
 
-        # Crop the image using the selected region
-        # (you'll need to write code here to actually perform the cropping)
-        print(x0," ",x1," ",y0," ",y1)
+    #     # Update the figure with the cropped image
+    #     figure = {
+    #         'data': [{
+    #             'x': [1],
+    #             'y': [1],
+    #             'type': 'image',
+    #             'source': 'data:image/png;base64,{}'.format(encoded_image),
+    #             'sizing': 'stretch',
+    #         }]
+    #     }
+    #     return figure
 
-        # Update the figure with the cropped image
-        figure = {
-            'data': [{
-                'x': [1],
-                'y': [1],
-                'type': 'image',
-                'source': 'data:image/png;base64,{}'.format(encoded_image),
-                'sizing': 'stretch',
-            }]
-        }
-        return figure
-
-    # If no region is selected, return the original figure
-    return {
-        'data': [{
-                'x': [1],
-                'y': [1],
-                'type': 'image',
-                'source': 'data:image/png;base64,{}'.format(encoded_image),
-                'sizing': 'stretch'
-            }]
-    }
+    # # If no region is selected, return the original figure
+    # return {
+    #     'data': [{
+    #             'x': [1],
+    #             'y': [1],
+    #             'type': 'image',
+    #             'source': 'data:image/png;base64,{}'.format(encoded_image),
+    #             'sizing': 'stretch'
+    #         }]
+    # }
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
+
