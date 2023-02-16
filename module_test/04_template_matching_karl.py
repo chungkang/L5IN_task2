@@ -20,10 +20,10 @@ class Template:
         self.template = cv2.imread(image_path)
         self.template_height, self.template_width = self.template.shape[:2]
         self.matching_threshold = matching_threshold
-image = cv2.imread("module_test\\result\\20220112_162250_inpaint.png") 
+image = cv2.imread("module_test\\result\\20220112_162250_wrapped_crop.png") 
 templates = [
-    # Template(image_path="module_test\\result\\template_1.png", label="1", color=(0, 255, 255)),
-    # Template(image_path="module_test\\result\\template_2.png", label="2", color=(0, 255, 255)),
+    Template(image_path="module_test\\result\\template_1.png", label="1", color=(255, 255, 255)),
+    Template(image_path="module_test\\result\\template_2.png", label="2", color=(0, 255, 255)),
     Template(image_path="module_test\\result\\template_3.png", label="3", color=(255, 0, 0)),
 
     # Template(image_path="emergency.JPG", label="2", color=(140, 120, 42)),
