@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
 """
-Created on Thu Aug 12 08:48:22 2021
-
-@author: DMZ-Admin
-
 source article: https://www.sicara.ai/blog/object-detection-template-matching
 source code: https://gist.github.com/jrovani/2de8c25a040dc3ea529a1b6324fb30be#gistcomment-3652497
 """
@@ -11,7 +6,7 @@ source code: https://gist.github.com/jrovani/2de8c25a040dc3ea529a1b6324fb30be#gi
 import cv2
 import numpy as np
 
-DEFAULT_TEMPLATE_MATCHING_THRESHOLD = 0.57 # 0.6-7 works well for EG2, 0.57-0.6 works fine for EG1
+DEFAULT_TEMPLATE_MATCHING_THRESHOLD = 0.6 # 0.6-7 works well for EG2, 0.57-0.6 works fine for EG1
 class Template:
      def __init__(self, image_path, label, color, matching_threshold=DEFAULT_TEMPLATE_MATCHING_THRESHOLD):
         self.image_path = image_path
@@ -25,39 +20,36 @@ templates = [
     Template(image_path="module_test\\result\\template_1.png", label="1", color=(255, 255, 255)),
     Template(image_path="module_test\\result\\template_2.png", label="2", color=(0, 255, 255)),
     Template(image_path="module_test\\result\\template_3.png", label="3", color=(255, 0, 0)),
-
-    # Template(image_path="emergency.JPG", label="2", color=(140, 120, 42)),
-    # Template(image_path="emergency_1243.JPG", label="3", color=(255, 0, 0)),
-    # Template(image_path="exitD.JPG", label="4", color=(255, 191, 255)),
-    # Template(image_path="exitD2.JPG", label="5", color=(255, 191, 255)),
-    # Template(image_path="exitD_1243.JPG", label="6", color=(0, 0, 255)),
-    # Template(image_path="exitU.JPG", label="7", color=(0, 0, 255)),
-    # Template(image_path="exitU2.JPG", label="8", color=(0, 0, 255)),
-    # Template(image_path="exitU_1243.JPG", label="9", color=(0, 255, 0)),
-    # Template(image_path="exitL.JPG", label="10", color=(0, 255, 0)),
-    # Template(image_path="exitR.JPG", label="11", color=(0, 255, 60)),
-    # Template(image_path="firstaid.JPG", label="12", color=(0, 0, 255)),
 ]
 
 detections = []
+scale_range = [0.8, 0.9, 1.0, 1.1, 1.2]
+angle_range = [0,15,30,45,60,75,90,105,120,135,150,165,180]
+
 for template in templates:
-    template_matching = cv2.matchTemplate(
-        template.template, image, cv2.TM_CCOEFF_NORMED
-    )
+    for scale in scale_range:
+        for angle in angle_range:
+            center = (template.template.shape[1] // 2, template.template.shape[0] // 2)
+            M = cv2.getRotationMatrix2D(center, angle, scale)
+            rotated_template = cv2.warpAffine(template.template, M, template.template.shape[::-1])
 
-    match_locations = np.where(template_matching >= template.matching_threshold)
+            template_matching = cv2.matchTemplate(
+                image, rotated_template, cv2.TM_CCOEFF_NORMED
+            )
 
-    for (x, y) in zip(match_locations[1], match_locations[0]):
-        match = {
-            "TOP_LEFT_X": x,
-            "TOP_LEFT_Y": y,
-            "BOTTOM_RIGHT_X": x + template.template_width,
-            "BOTTOM_RIGHT_Y": y + template.template_height,
-            "MATCH_VALUE": template_matching[y, x],
-            "LABEL": template.label,
-            "COLOR": template.color
-        }      
-        detections.append(match)
+            match_locations = np.where(template_matching >= template.matching_threshold)
+
+            for (x, y) in zip(match_locations[1], match_locations[0]):
+                match = {
+                    "TOP_LEFT_X": x,
+                    "TOP_LEFT_Y": y,
+                    "BOTTOM_RIGHT_X": x + template.template_width,
+                    "BOTTOM_RIGHT_Y": y + template.template_height,
+                    "MATCH_VALUE": template_matching[y, x],
+                    "LABEL": template.label,
+                    "COLOR": template.color
+                }      
+                detections.append(match)
 
 def compute_iou(
     boxA, boxB

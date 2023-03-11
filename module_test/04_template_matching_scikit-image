@@ -1,0 +1,33 @@
+from skimage import io
+import numpy as np
+from skimage.transform import rotate
+from skimage.feature import match_template
+
+input_image = io.imread('module_test\\result\\20220112_162250_wrapped_crop.png')
+rotated_template = io.imread('module_test\\result\\template_2.png')
+
+best_score = -1
+best_angle = 0
+
+angles = np.arange(0, 360, 5)
+for angle in angles:
+    # Rotate the template image
+    rotated = rotate(rotated_template, angle, resize=True)
+
+    # Perform template matching
+    result = match_template(input_image, rotated)
+
+    # Find the maximum correlation score
+    score = np.max(result)
+    if score > best_score:
+        best_score = score
+        best_angle = angle
+
+# Rotate the template image by the best angle
+rotated_template = rotate(rotated_template, best_angle, resize=True)
+
+# Perform template matching again
+result = match_template(input_image, rotated_template)
+
+# Find the location of the best match
+y, x = np.unravel_index(np.argmax(result), result.shape)
