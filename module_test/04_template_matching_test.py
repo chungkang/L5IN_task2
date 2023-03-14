@@ -1,4 +1,9 @@
+# -*- coding: utf-8 -*-
 """
+Created on Thu Aug 12 08:48:22 2021
+
+@author: DMZ-Admin
+
 source article: https://www.sicara.ai/blog/object-detection-template-matching
 source code: https://gist.github.com/jrovani/2de8c25a040dc3ea529a1b6324fb30be#gistcomment-3652497
 """
@@ -6,7 +11,7 @@ source code: https://gist.github.com/jrovani/2de8c25a040dc3ea529a1b6324fb30be#gi
 import cv2
 import numpy as np
 
-DEFAULT_TEMPLATE_MATCHING_THRESHOLD = 0.6
+DEFAULT_TEMPLATE_MATCHING_THRESHOLD = 0.7
 class Template:
      def __init__(self, image_path, label, color, matching_threshold=DEFAULT_TEMPLATE_MATCHING_THRESHOLD):
         self.image_path = image_path
@@ -15,30 +20,44 @@ class Template:
         self.template = cv2.imread(image_path)
         self.template_height, self.template_width = self.template.shape[:2]
         self.matching_threshold = matching_threshold
-image = cv2.imread("module_test\\result\\20220112_162250_wrapped_crop.png") 
+image = cv2.imread('module_test\\result\\20220112_162250_wrapped_crop.png') 
 templates = [
-    Template(image_path="module_test\\result\\template_1.png", label="1", color=(255, 255, 255)),
-    Template(image_path="module_test\\result\\template_2.png", label="2", color=(0, 255, 255)),
-    Template(image_path="module_test\\result\\template_3.png", label="3", color=(255, 0, 0)),
+    Template(image_path='module_test\\result\\template_1.png', label="1", color=(0, 255, 255)),
+    Template(image_path='module_test\\result\\template_2.png', label="2", color=(140, 120, 42)),
+    Template(image_path='module_test\\result\\template_3.png', label="3", color=(255, 0, 0)),
+    Template(image_path='module_test\\result\\template_4.png', label="4", color=(255, 191, 255)),
+    Template(image_path='module_test\\result\\template_5.png', label="5", color=(0, 0, 255)),
 ]
 
+
+# Convert images to HSV color space
+# image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+# save detected templates
 detections = []
-scale_range = [0.8, 0.9, 1.0, 1.1, 1.2]
-angle_range = [0,15,30,45,60,75,90,105,120,135,150,165,180]
+
+# Define a range of rotation angles
+angles = np.arange(0,360, 5)
+scales = np.arange(0.9, 1.1, 0.1)
 
 for template in templates:
-    for scale in scale_range:
-        for angle in angle_range:
-            center = (template.template.shape[1] // 2, template.template.shape[0] // 2)
-            M = cv2.getRotationMatrix2D(center, angle, scale)
-            rotated_template = cv2.warpAffine(template.template, M, template.template.shape[::-1])
+    # Loop over all rotation angles
+    for angle in angles:
+        # Loop over all scales
+        for scale in scales:
+            # Get image size
+            h, w = template.template.shape[:2]
+            # Calculate rotation matrix
+            M = cv2.getRotationMatrix2D((w/2, h/2), angle, scale)
+            # Apply rotation and scaling to image
+            img_rotated_scaled = cv2.warpAffine(template.template, M, (w, h))
 
-            template_matching = cv2.matchTemplate(
-                image, rotated_template, cv2.TM_CCOEFF_NORMED
-            )
+            # Convert images to HSV color space
+            # template_hsv = cv2.cvtColor(img_rotated_scaled, cv2.COLOR_BGR2HSV)
 
+            # template_matching = cv2.matchTemplate(template_hsv, image, cv2.TM_CCORR_NORMED)
+            template_matching = cv2.matchTemplate(img_rotated_scaled, image, cv2.TM_CCOEFF_NORMED)
             match_locations = np.where(template_matching >= template.matching_threshold)
-
             for (x, y) in zip(match_locations[1], match_locations[0]):
                 match = {
                     "TOP_LEFT_X": x,
