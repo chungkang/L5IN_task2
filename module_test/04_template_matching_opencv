@@ -1,46 +1,44 @@
 import cv2
 import numpy as np
 
-DEFAULT_TEMPLATE_MATCHING_THRESHOLD = 0.5 # 0.6-7 works well for EG2, 0.57-0.6 works fine for EG1
+# Load the main image and the template image
+main_image = cv2.imread('module_test\\result\\20220112_162250_wrapped_crop.png')
+template_image = cv2.imread('module_test\\result\\template_3.png')
 
-target = cv2.imread("module_test\\result\\20220112_162250_wrapped_crop.png", cv2.IMREAD_GRAYSCALE)
+# Define a range of rotation angles
+angles = np.arange(0,360, 15)
 
-# Load the template and target images
-template_list = ["template_2.png","template_3.png"]
-# "template_1.png",
-for template_name in template_list:
-    template = cv2.imread("module_test\\result\\" + template_name, cv2.IMREAD_GRAYSCALE)
+# Initialize variables to keep track of the best match
+max_corr = 0.6
+best_match_loc = None
 
-    # Define the rotation angle and scale factor
-    angle_range = [0,15,30,45,60,75,90,105,120,135,150,165,180]
+# Loop over all rotation angles
+for angle in angles:
 
-    for angle in angle_range:
-        # angle = 0
-        scale_range = [0.8, 0.9, 1.0, 1.1, 1.2]
-        for scale in scale_range:
-            # scale = 1.0
-            # Create a rotated copy of the template image
-            center = (template.shape[1] // 2, template.shape[0] // 2)
-            M = cv2.getRotationMatrix2D(center, angle, scale)
-            rotated_template = cv2.warpAffine(template, M, template.shape[::-1])
+    # Rotate the template image by the current angle
+    rows, cols = template_image.shape[:2]
+    M = cv2.getRotationMatrix2D((cols/2,rows/2), angle, 1)
+    rotated_template = cv2.warpAffine(template_image, M, (cols,rows))
 
-            # Perform template matching with the rotated template
-            result = cv2.matchTemplate(target, rotated_template, cv2.TM_CCOEFF_NORMED)
+    # Perform template matching between the main image and the rotated template image
+    result = cv2.matchTemplate(main_image, rotated_template, cv2.TM_CCOEFF_NORMED)
 
-            print(result)
+    # Find the location of the maximum correlation value in the result
+    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
 
-            if np.where(result < DEFAULT_TEMPLATE_MATCHING_THRESHOLD):
-                continue
+    # Check if this is the best match so far
+    if max_val > max_corr:
+        max_corr = max_val
+        best_match_loc = max_loc
+        best_match_angle = angle
 
-            # Locate the position of the best match in the target image
-            min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-            top_left = max_loc
+# Draw a rectangle around the best match in the main image
+w, h = template_image.shape[:-1]
+top_left = best_match_loc
+bottom_right = (top_left[0] + w, top_left[1] + h)
+cv2.rectangle(main_image, top_left, bottom_right, (0, 0, 255), 2)
 
-            # Draw a rectangle around the best match in the target image
-            bottom_right = (top_left[0] + rotated_template.shape[1], top_left[1] + rotated_template.shape[0])
-            cv2.rectangle(target, top_left, bottom_right, (0, 255, 0), 2)
-
-# Display the resulting image with the best match highlighted
-cv2.imshow('Result', target)
+# Display the result
+cv2.imshow('Matching Result', main_image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()

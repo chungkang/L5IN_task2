@@ -6,7 +6,7 @@ source code: https://gist.github.com/jrovani/2de8c25a040dc3ea529a1b6324fb30be#gi
 import cv2
 import numpy as np
 
-DEFAULT_TEMPLATE_MATCHING_THRESHOLD = 0.6 # 0.6-7 works well for EG2, 0.57-0.6 works fine for EG1
+DEFAULT_TEMPLATE_MATCHING_THRESHOLD = 0.6
 class Template:
      def __init__(self, image_path, label, color, matching_threshold=DEFAULT_TEMPLATE_MATCHING_THRESHOLD):
         self.image_path = image_path
