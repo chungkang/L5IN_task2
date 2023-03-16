@@ -1,7 +1,10 @@
 import cv2
 
 #reading image
-image = cv2.imread('module_test\\result\\20220112_162250_warped.png')
+# image = cv2.imread('module_test\\result\\20220112_162250_warped.png')
+
+image = cv2.imread("module_test\\result_clear\\EG1.PNG")
+
 
 #converting to gray scale
 gray=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
@@ -18,7 +21,8 @@ for c in cnts:
 		idx+=1
 		new_img=image[y:y+h,x:x+w]
 		#cropping images
-		cv2.imwrite('module_test\\result\\20220112_162250'+str(idx) + '_crop.png', new_img)
+		# cv2.imwrite('module_test\\result\\20220112_162250'+str(idx) + '_crop.png', new_img)
+		cv2.imwrite('module_test\\result_clear\\EG1'+str(idx) + '_crop.png', new_img)
 #cv2.imshow("Original Image",image)
 #cv2.imshow("Canny Edge",edged)
 #cv2.waitKey(0)

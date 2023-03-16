@@ -11,7 +11,7 @@ source code: https://gist.github.com/jrovani/2de8c25a040dc3ea529a1b6324fb30be#gi
 import cv2
 import numpy as np
 
-DEFAULT_TEMPLATE_MATCHING_THRESHOLD = 0.7
+DEFAULT_TEMPLATE_MATCHING_THRESHOLD = 0.6
 class Template:
      def __init__(self, image_path, label, color, matching_threshold=DEFAULT_TEMPLATE_MATCHING_THRESHOLD):
         self.image_path = image_path
@@ -20,15 +20,29 @@ class Template:
         self.template = cv2.imread(image_path)
         self.template_height, self.template_width = self.template.shape[:2]
         self.matching_threshold = matching_threshold
-image = cv2.imread('module_test\\result\\20220112_162250_wrapped_crop.png') 
-templates = [
-    Template(image_path='module_test\\result\\template_1.png', label="1", color=(0, 255, 255)),
-    Template(image_path='module_test\\result\\template_2.png', label="2", color=(140, 120, 42)),
-    Template(image_path='module_test\\result\\template_3.png', label="3", color=(255, 0, 0)),
-    Template(image_path='module_test\\result\\template_4.png', label="4", color=(255, 191, 255)),
-    Template(image_path='module_test\\result\\template_5.png', label="5", color=(0, 0, 255)),
-]
+# image = cv2.imread('module_test\\result\\20220112_162250_wrapped_crop.png') 
+# templates = [
+#     Template(image_path='module_test\\result\\template_1.png', label="1", color=(0, 255, 255)),
+#     Template(image_path='module_test\\result\\template_2.png', label="2", color=(140, 120, 42)),
+#     Template(image_path='module_test\\result\\template_3.png', label="3", color=(255, 0, 0)),
+#     Template(image_path='module_test\\result\\template_4.png', label="4", color=(255, 191, 255)),
+#     Template(image_path='module_test\\result\\template_5.png', label="5", color=(0, 0, 255)),
+# ]
 
+
+# image = cv2.imread("module_test\\result_clear\\EG1.PNG") 
+# templates = [
+#     Template(image_path='module_test\\result_clear\\template_1.png', label="1", color=(0, 255, 255)),
+# ]
+
+image = cv2.imread("module_test\\result_1\\image1_crop.png") 
+templates = [
+    Template(image_path='module_test\\result_1\\template_2.png', label="1", color=(0, 255, 255)),
+    Template(image_path='module_test\\result_1\\template_3_l.png', label="2", color=(140, 120, 42)),
+    Template(image_path='module_test\\result_1\\template_4_m.png', label="3", color=(255, 0, 0)),
+#     Template(image_path='module_test\\result\\template_4.png', label="4", color=(255, 191, 255)),
+#     Template(image_path='module_test\\result\\template_5.png', label="5", color=(0, 0, 255)),
+]
 
 # Convert images to HSV color space
 # image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -37,7 +51,7 @@ templates = [
 detections = []
 
 # Define a range of rotation angles
-angles = np.arange(0,360, 5)
+angles = np.arange(0,360, 10)
 scales = np.arange(0.9, 1.1, 0.1)
 
 for template in templates:
@@ -124,4 +138,6 @@ for detection in detections:
         cv2.LINE_AA,
     )
     """
-cv2.imwrite('module_test\\result\\20220112_162250_template.png', image_with_detections)
+# cv2.imwrite('module_test\\result\\20220112_162250_template.png', image_with_detections)
+cv2.imwrite("module_test\\result_1\\image1_template.png", image_with_detections)
+
