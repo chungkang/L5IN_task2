@@ -30,19 +30,65 @@ class Template:
 # ]
 
 
-# image = cv2.imread("module_test\\result_clear\\EG1.PNG") 
+# image = cv2.imread("module_test\\result_2\\image1_crop.png") 
 # templates = [
-#     Template(image_path='module_test\\result_clear\\template_1.png', label="1", color=(0, 255, 255)),
+#     Template(image_path='module_test\\result_2\\template_1.png', label="1", color=(0, 255, 255)),
 # ]
 
-image = cv2.imread("module_test\\result_1\\image1_crop.png") 
+# image = cv2.imread("module_test\\result_2\\image1_crop_biliteral.png") 
+# templates = [
+#     Template(image_path='module_test\\result_2\\template_biliteral_1.png', label="1", color=(0, 255, 255)),
+# ]
+
+# image = cv2.imread("module_test\\result_2\\image1_crop_blur.png") 
+# templates = [
+#     Template(image_path='module_test\\result_2\\template_blur_1.png', label="1", color=(0, 255, 255)),
+# ]
+
+# image = cv2.imread("module_test\\result_2\\image1_crop_blur_averaging.png") 
+# templates = [
+#     Template(image_path='module_test\\result_2\\template_blur_averaging_1.png', label="1", color=(0, 255, 255)),
+# ]
+
+# image = cv2.imread("module_test\\result_2\\image1_crop_median.png") 
+# templates = [
+#     Template(image_path='module_test\\result_2\\template_median_1.png', label="1", color=(0, 255, 255)),
+# ]
+
+# image = cv2.imread("module_test\\result_1\\image1_crop.png") 
+# templates = [
+#     Template(image_path='module_test\\result_1\\template_2.png', label="1", color=(0, 255, 255)),
+#     Template(image_path='module_test\\result_1\\template_3_l.png', label="2", color=(140, 120, 42)),
+#     Template(image_path='module_test\\result_1\\template_4_m.png', label="3", color=(255, 0, 0))
+# ]
+
+image = cv2.imread("module_test\\result_2\\with_legend\\image1_crop_biliteral_template.png")
 templates = [
-    Template(image_path='module_test\\result_1\\template_2.png', label="1", color=(0, 255, 255)),
-    Template(image_path='module_test\\result_1\\template_3_l.png', label="2", color=(140, 120, 42)),
-    Template(image_path='module_test\\result_1\\template_4_m.png', label="3", color=(255, 0, 0)),
-#     Template(image_path='module_test\\result\\template_4.png', label="4", color=(255, 191, 255)),
-#     Template(image_path='module_test\\result\\template_5.png', label="5", color=(0, 0, 255)),
+    # Template(image_path='module_test\\result_2\\with_legend\\template_biliteral_1.png', label="1", color=(0, 255, 255)),
+    Template(image_path='module_test\\result_2\\with_legend\\template_biliteral_2.png', label="2", color=(140, 120, 42)),
+    # Template(image_path='module_test\\result_2\\template_4_m.png', label="3", color=(255, 0, 0))
 ]
+
+# image = cv2.imread("module_test\\result_2\\image1_crop_blur.png") 
+# templates = [
+#     Template(image_path='module_test\\result_2\\template_blur_1.png', label="1", color=(0, 255, 255)),
+#     Template(image_path='module_test\\result_2\\template_blur_2.png', label="2", color=(140, 120, 42)),
+#     # Template(image_path='module_test\\result_2\\template_4_m.png', label="3", color=(255, 0, 0))
+# ]
+
+# image = cv2.imread("module_test\\result_2\\image1_crop_blur_averaging.png") 
+# templates = [
+#     Template(image_path='module_test\\result_2\\template_blur_averaging_1.png', label="1", color=(0, 255, 255)),
+#     Template(image_path='module_test\\result_2\\template_blur_averaging_2.png', label="2", color=(140, 120, 42)),
+#     # Template(image_path='module_test\\result_2\\template_4_m.png', label="3", color=(255, 0, 0))
+# ]
+
+# image = cv2.imread("module_test\\result_2\\image1_crop_median.png") 
+# templates = [
+#     Template(image_path='module_test\\result_2\\template_median_1.png', label="1", color=(0, 255, 255)),
+#     Template(image_path='module_test\\result_2\\template_median_2.png', label="2", color=(140, 120, 42)),
+#     # Template(image_path='module_test\\result_2\\template_4_m.png', label="3", color=(255, 0, 0))
+# ]
 
 # Convert images to HSV color space
 # image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -51,8 +97,8 @@ templates = [
 detections = []
 
 # Define a range of rotation angles
-angles = np.arange(0,360, 10)
-scales = np.arange(0.9, 1.1, 0.1)
+angles = np.arange(0,360,5)
+scales = np.arange(0.7, 1.3, 0.05)
 
 for template in templates:
     # Loop over all rotation angles
@@ -139,5 +185,12 @@ for detection in detections:
     )
     """
 # cv2.imwrite('module_test\\result\\20220112_162250_template.png', image_with_detections)
-cv2.imwrite("module_test\\result_1\\image1_template.png", image_with_detections)
-
+# cv2.imwrite("module_test\\result_2\\image1_template.png", image_with_detections)
+cv2.imwrite("module_test\\result_2\\with_legend\\image1_biliteral_template.png", image_with_detections)
+# cv2.imwrite("module_test\\result_2\\image1_blur_template.png", image_with_detections)
+# cv2.imwrite("module_test\\result_2\\image1_blur_averaging_template.png", image_with_detections)
+# cv2.imwrite("module_test\\result_2\\image1_median_template.png", image_with_detections)
+# cv2.imwrite("module_test\\result_2\\image1_crop_biliteral_template.png", image_with_detections)
+# cv2.imwrite("module_test\\result_2\\image1_crop_blur_template.png", image_with_detections)
+# cv2.imwrite("module_test\\result_2\\image1_crop_blur_averaging_template.png", image_with_detections)
+# cv2.imwrite("module_test\\result_2\\image1_crop_median_template.png", image_with_detections)
