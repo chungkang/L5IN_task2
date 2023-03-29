@@ -97,38 +97,47 @@ templates = [
 detections = []
 
 # Define a range of rotation angles
-angles = np.arange(0,360,5)
-scales = np.arange(0.7, 1.3, 0.05)
+angles = np.arange(0,360,10)
+scales = np.arange(0.7, 1.3, 0.1)
+
+# for mirrored template
+flip_yn = [0,1]
 
 for template in templates:
-    # Loop over all rotation angles
-    for angle in angles:
-        # Loop over all scales
-        for scale in scales:
-            # Get image size
-            h, w = template.template.shape[:2]
-            # Calculate rotation matrix
-            M = cv2.getRotationMatrix2D((w/2, h/2), angle, scale)
-            # Apply rotation and scaling to image
-            img_rotated_scaled = cv2.warpAffine(template.template, M, (w, h))
+    for flip in flip_yn:
+        if flip == 1:
+            template.template = cv2.flip(template.template, 1)
+        else:
+            template.template = cv2.flip(template.template, 0)
 
-            # Convert images to HSV color space
-            # template_hsv = cv2.cvtColor(img_rotated_scaled, cv2.COLOR_BGR2HSV)
+        # Loop over all rotation angles
+        for angle in angles:
+            # Loop over all scales
+            for scale in scales:
+                # Get image size
+                h, w = template.template.shape[:2]
+                # Calculate rotation matrix
+                M = cv2.getRotationMatrix2D((w/2, h/2), angle, scale)
+                # Apply rotation and scaling to image
+                img_rotated_scaled = cv2.warpAffine(template.template, M, (w, h))
 
-            # template_matching = cv2.matchTemplate(template_hsv, image, cv2.TM_CCORR_NORMED)
-            template_matching = cv2.matchTemplate(img_rotated_scaled, image, cv2.TM_CCOEFF_NORMED)
-            match_locations = np.where(template_matching >= template.matching_threshold)
-            for (x, y) in zip(match_locations[1], match_locations[0]):
-                match = {
-                    "TOP_LEFT_X": x,
-                    "TOP_LEFT_Y": y,
-                    "BOTTOM_RIGHT_X": x + template.template_width,
-                    "BOTTOM_RIGHT_Y": y + template.template_height,
-                    "MATCH_VALUE": template_matching[y, x],
-                    "LABEL": template.label,
-                    "COLOR": template.color
-                }      
-                detections.append(match)
+                # Convert images to HSV color space
+                # template_hsv = cv2.cvtColor(img_rotated_scaled, cv2.COLOR_BGR2HSV)
+
+                # template_matching = cv2.matchTemplate(template_hsv, image, cv2.TM_CCORR_NORMED)
+                template_matching = cv2.matchTemplate(img_rotated_scaled, image, cv2.TM_CCOEFF_NORMED)
+                match_locations = np.where(template_matching >= template.matching_threshold)
+                for (x, y) in zip(match_locations[1], match_locations[0]):
+                    match = {
+                        "TOP_LEFT_X": x,
+                        "TOP_LEFT_Y": y,
+                        "BOTTOM_RIGHT_X": x + template.template_width,
+                        "BOTTOM_RIGHT_Y": y + template.template_height,
+                        "MATCH_VALUE": template_matching[y, x],
+                        "LABEL": template.label,
+                        "COLOR": template.color
+                    }      
+                    detections.append(match)
 
 def compute_iou(
     boxA, boxB
