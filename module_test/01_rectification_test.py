@@ -35,7 +35,8 @@ def compute_edgelets(image, sigma=3):
     strengths: ndarray of shape (n_edgelets,)
         Length of the line segments detected for the edgelet.
     """
-    gray_img = color.rgb2gray(image)
+    # gray_img = color.rgb2gray(image)
+    gray_img = image
     edges = feature.canny(gray_img, sigma)
     lines = transform.probabilistic_hough_line(edges, line_length=3,
                                                line_gap=2)
@@ -533,7 +534,8 @@ if __name__ == '__main__':
     # save_name = '.'.join(image_name.split('.')[:-1]) + '_warped.png'
     
     # file_name = "module_test\\result\\20220112_162250"
-    file_name = "module_test\\result_1\\image1"
+    # file_name = "module_test\\result_1\\image1"
+    file_name = "module_test\\glare_test2\\IMG_3754_division_sharp"
 
     image_name = file_name + ".jpg"
     save_name = file_name + '_wraped.png'
