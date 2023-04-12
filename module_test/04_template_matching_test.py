@@ -21,12 +21,12 @@ class Template:
         self.template_height, self.template_width = self.template.shape[:2]
         self.matching_threshold = matching_threshold
 
-image = cv2.imread("module_test\\result\\image1_map.png")
+image = cv2.imread("module_test\\result\\furniture_part1.png")
 templates = [
-    Template(image_path='module_test\\result\\image1_template1.png', label="1", color=(0, 255, 255)),
+    # Template(image_path='module_test\\result\\image1_template1.png', label="1", color=(0, 255, 255)),
     Template(image_path='module_test\\result\\image1_template2.png', label="2", color=(140, 120, 42)),
-    Template(image_path='module_test\\result\\image1_template3.png', label="3", color=(0, 200, 50)),
-    Template(image_path='module_test\\result\\image1_template4.png', label="4", color=(140, 250, 0)),
+    # Template(image_path='module_test\\result\\image1_template3.png', label="3", color=(0, 200, 50)),
+    # Template(image_path='module_test\\result\\image1_template4.png', label="4", color=(140, 250, 0)),
     # Template(image_path='module_test\\result\\template_biliteral_5.png', label="5", color=(140, 0, 100)),
     # Template(image_path='module_test\\result\\template_biliteral_6.png', label="6", color=(255, 191, 255)),
 ]
@@ -78,9 +78,7 @@ for template in templates:
                     }      
                     detections.append(match)
 
-def compute_iou(
-    boxA, boxB
-):
+def compute_iou(boxA, boxB):
     xA = max(boxA["TOP_LEFT_X"], boxB["TOP_LEFT_X"])
     yA = max(boxA["TOP_LEFT_Y"], boxB["TOP_LEFT_Y"])
     xB = min(boxA["BOTTOM_RIGHT_X"], boxB["BOTTOM_RIGHT_X"])
@@ -91,11 +89,7 @@ def compute_iou(
     iou = interArea / float(boxAArea + boxBArea - interArea)
     return iou
 
-def non_max_suppression(
-    objects,
-    non_max_suppression_threshold=0.5,
-    score_key="MATCH_VALUE",
-):
+def non_max_suppression(objects, non_max_suppression_threshold=0.5, score_key="MATCH_VALUE",):
     sorted_objects = sorted(objects, key=lambda obj: obj[score_key], reverse=True)
     filtered_objects = []
     for object_ in sorted_objects:
