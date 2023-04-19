@@ -21,16 +21,20 @@ class Template:
         self.template_height, self.template_width = self.template.shape[:2]
         self.matching_threshold = matching_threshold
 
-image = cv2.imread("module_test\\result\\image1_crop_biliteral_part.png")
+image = cv2.imread("module_test\\result\\contrast_image.png")
 
 templates = [
-    Template(image_path='module_test\\result\\template_biliteral_1.png', label="1", color=(0, 255, 255)),
-    Template(image_path='module_test\\result\\template_biliteral_2.png', label="2", color=(140, 120, 42)),
-    Template(image_path='module_test\\result\\template_biliteral_3.png', label="3", color=(0, 200, 50)),
-    Template(image_path='module_test\\result\\template_biliteral_4.png', label="4", color=(140, 250, 0)),
-    Template(image_path='module_test\\result\\template_biliteral_5.png', label="5", color=(140, 0, 100)),
-    Template(image_path='module_test\\result\\template_biliteral_6.png', label="6", color=(255, 191, 255)),
+    Template(image_path='module_test\\result\\teamplate1.png', label="1", color=(0, 255, 255)),
+    Template(image_path='module_test\\result\\teamplate2.png', label="2", color=(140, 120, 42)),
+    Template(image_path='module_test\\result\\teamplate3.png', label="3", color=(0, 200, 50)),
+    # Template(image_path='module_test\\result\\template_biliteral_4.png', label="4", color=(140, 250, 0)),
+    # Template(image_path='module_test\\result\\template_biliteral_5.png', label="5", color=(140, 0, 100)),
+    # Template(image_path='module_test\\result\\template_biliteral_6.png', label="6", color=(255, 191, 255)),
 ]
+
+# templates = [
+#     Template(image_path='module_test\\result\\image1_template5.png', label="1", color=(0, 255, 255)),
+# ]
 
 # Convert images to HSV color space
 # image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -153,4 +157,4 @@ for detection in detections:
     )
     """
 
-cv2.imwrite("module_test\\result\\image1_result.png", image_with_detections)
+cv2.imwrite("module_test\\result\\contrast_template_result.png", image_with_detections)
