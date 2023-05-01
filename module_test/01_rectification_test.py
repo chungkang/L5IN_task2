@@ -12,6 +12,8 @@ References
 from skimage import feature, color, transform, io
 import numpy as np
 import logging
+import cv2
+from skimage import img_as_ubyte
 
 def compute_edgelets(image, sigma=3):
     """Create edgelets as in the paper.
@@ -517,8 +519,7 @@ def rectify_image(image, clip_factor=6, algorithm='independent',
             "Parameter 'algorithm' has to be one of {'3-line', 'independent'}")
 
     # Compute the homography and warp
-    warped_img = compute_homography_and_warp(image, vp1, vp2,
-                                             clip_factor=clip_factor)
+    warped_img = compute_homography_and_warp(image, vp1, vp2, clip_factor=clip_factor)
 
     return warped_img
 
@@ -535,10 +536,15 @@ if __name__ == '__main__':
     
     # file_name = "module_test\\result\\20220112_162250"
     # file_name = "module_test\\result_1\\image1"
-    file_name = "module_test\\result\\image1"
+    file_name = "module_test\\result\\image"
     image_name = file_name + ".jpg"
-    save_name = file_name + '_wraped.png'
+    save_name_rectification = file_name + '_wraped.png'
 
-    io.imsave(save_name, rectify_image(image_name, 4, algorithm='independent'))
+    img = rectify_image(image_name, 4, algorithm='independent')
+    io.imsave(save_name_rectification, img)
 
-
+    # save_name_bilateral_filter = file_name + '_map_bilateral.png'
+    # cv2_img = img_as_ubyte(img)
+    # blur = cv2.GaussianBlur(cv2_img, (5, 5), 0)
+    # bilateral = cv2.bilateralFilter(blur, 9, 75, 75)
+    # cv2.imwrite(save_name_bilateral_filter, bilateral)
