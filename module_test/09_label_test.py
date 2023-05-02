@@ -1,6 +1,9 @@
 import cv2
 
-src = cv2.imread('module_test\\result\\label_test.png', cv2.IMREAD_GRAYSCALE)
+file_name = "module_test\\result\\label_test"
+image_name = file_name + ".png"
+
+src = cv2.imread(image_name, cv2.IMREAD_GRAYSCALE)
 
 _, src_bin = cv2.threshold(src, 0, 255, cv2.THRESH_OTSU)
 
@@ -18,8 +21,8 @@ for i in range(1, cnt):
 
     cv2.rectangle(dst, (x, y, w, h), (0, 255, 255))
 
-cv2.imwrite("module_test\\result\\label_binary.png", src_bin)
-cv2.imwrite("module_test\\result\\label_line.png", dst)
+cv2.imwrite(file_name + "_binary.png", src_bin)
+cv2.imwrite(file_name + "_line.png", dst)
 
 # cv2.imshow('src', src)
 # cv2.imshow('src_bin', src_bin)
