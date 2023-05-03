@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-file_name = "module_test\\result\\image1-2_crop"
+file_name = "module_test\\result\\image2-2_crop"
 image_name = file_name + ".png"
 
 img = cv2.imread(image_name)
@@ -19,6 +19,11 @@ cv2.imwrite(file_name + "_bilateral.png", bilateral)
 # cv2.imwrite("module_test\\result_2\\image1_wraped_blur_averaging.png", blur_averaging)
 
 img_gray = cv2.cvtColor(bilateral, cv2.COLOR_BGR2GRAY)
-# src = cv2.imread(image_name, cv2.IMREAD_GRAYSCALE)
 _, src_bin = cv2.threshold(img_gray, 0, 255, cv2.THRESH_OTSU)
-cv2.imwrite(file_name + "_bin.png", src_bin)
+# cv2.imwrite(file_name + "_bin.png", src_bin)
+
+cv2.imwrite(file_name + "_gray.png", img_gray)
+
+normalized = cv2.normalize(img_gray, None, 0, 255, cv2.NORM_MINMAX)
+cv2.imwrite(file_name + "_normalize.png", normalized)
+

@@ -12,7 +12,7 @@ import cv2
 import numpy as np
 
 DEFAULT_TEMPLATE_MATCHING_THRESHOLD = 0.65
-file_name = "module_test\\result\\image1-2_crop_bin"
+file_name = "module_test\\result\\image2-2_crop_normalize_map"
 image_name = file_name + ".png"
 
 class Template:
@@ -28,11 +28,11 @@ image = cv2.imread(image_name)
 
 templates = [
     Template(image_path = file_name + '_template1.png', label="1", color=(0, 255, 255)),
-    # Template(image_path = file_name + '_template2.png', label="2", color=(140, 120, 42)),    
-    # Template(image_path = file_name + '_template3.png', label="3", color=(0, 200, 50)),
-    # Template(image_path = file_name + '_template4.png', label="4", color=(140, 250, 0)),
-    # Template(image_path='module_test\\result\\template_biliteral_5.png', label="5", color=(140, 0, 100)),
-    # Template(image_path='module_test\\result\\template_biliteral_6.png', label="6", color=(255, 191, 255)),
+    Template(image_path = file_name + '_template2.png', label="2", color=(140, 120, 42)),    
+    Template(image_path = file_name + '_template3.png', label="3", color=(0, 200, 50)),
+    Template(image_path = file_name + '_template4.png', label="4", color=(140, 250, 0)),
+    Template(image_path = file_name + '_template5.png', label="5", color=(140, 0, 100)),
+    Template(image_path = file_name + '_template6.png', label="6", color=(255, 191, 255)),
 ]
 
 # Convert images to HSV color space
@@ -116,6 +116,7 @@ def non_max_suppression(objects, threshold=0.5, score_key="MATCH_VALUE"):
 
 NMS_THRESHOLD = 0.2
 detections = non_max_suppression(detections, threshold=NMS_THRESHOLD) 
+image_with_detections_box = image.copy()
 image_with_detections = image.copy()
 
 for detection in detections:
@@ -130,7 +131,7 @@ for detection in detections:
     # Define the rectangle parameters
     center = (detection["CENTER_X"], detection["CENTER_Y"])
     # size = (detection["HEIGHT"], detection["WIDTH"])
-    size = (detection["HEIGHT"]+10, detection["WIDTH"]+10)
+    size = (detection["HEIGHT"]+15, detection["WIDTH"]+15)
     angle = detection["ANGLE"]
 
     # Calculate the rectangle vertices
@@ -138,9 +139,9 @@ for detection in detections:
     rect = np.int0(rect)
     color = detection["COLOR"]
     # Draw the rectangle on the image
-    cv2.drawContours(image_with_detections, [rect], 0, color, 3)
+    cv2.drawContours(image_with_detections_box, [rect], 0, color, 3)
     # fill rectangle with white color
-    # cv2.fillConvexPoly(image_with_detections, rect, (255, 255, 255))
+    cv2.fillConvexPoly(image_with_detections, rect, (255, 255, 255))
 
     """
     cv2.putText(
@@ -155,4 +156,5 @@ for detection in detections:
     )
     """
 
+cv2.imwrite( file_name + "_result_box.png", image_with_detections_box)
 cv2.imwrite( file_name + "_result.png", image_with_detections)

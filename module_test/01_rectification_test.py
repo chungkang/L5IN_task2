@@ -536,9 +536,9 @@ if __name__ == '__main__':
     
     # file_name = "module_test\\result\\20220112_162250"
     # file_name = "module_test\\result_1\\image1"
-    file_name = "module_test\\result\\image"
+    file_name = "module_test\\result\\image2"
     image_name = file_name + ".jpg"
-    save_name_rectification = file_name + '_wraped.png'
+    save_name_rectification = file_name + '_rect.png'
 
     img = rectify_image(image_name, 4, algorithm='independent')
     io.imsave(save_name_rectification, img)
