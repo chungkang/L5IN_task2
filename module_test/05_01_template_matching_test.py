@@ -12,7 +12,7 @@ import cv2
 import numpy as np
 
 DEFAULT_TEMPLATE_MATCHING_THRESHOLD = 0.65
-file_name = "module_test\\result\\image2-2_crop_normalize_map"
+file_name = "module_test\\result\\image2-2_crop_bin"
 image_name = file_name + ".png"
 
 class Template:
@@ -29,10 +29,10 @@ image = cv2.imread(image_name)
 templates = [
     Template(image_path = file_name + '_template1.png', label="1", color=(0, 255, 255)),
     Template(image_path = file_name + '_template2.png', label="2", color=(140, 120, 42)),    
-    Template(image_path = file_name + '_template3.png', label="3", color=(0, 200, 50)),
-    Template(image_path = file_name + '_template4.png', label="4", color=(140, 250, 0)),
-    Template(image_path = file_name + '_template5.png', label="5", color=(140, 0, 100)),
-    Template(image_path = file_name + '_template6.png', label="6", color=(255, 191, 255)),
+    # Template(image_path = file_name + '_template3.png', label="3", color=(0, 200, 50)),
+    # Template(image_path = file_name + '_template4.png', label="4", color=(140, 250, 0)),
+    # Template(image_path = file_name + '_template5.png', label="5", color=(140, 0, 100)),
+    # Template(image_path = file_name + '_template6.png', label="6", color=(255, 191, 255)),
 ]
 
 # Convert images to HSV color space

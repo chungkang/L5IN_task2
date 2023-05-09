@@ -20,7 +20,7 @@ cv2.imwrite(file_name + "_bilateral.png", bilateral)
 
 img_gray = cv2.cvtColor(bilateral, cv2.COLOR_BGR2GRAY)
 _, src_bin = cv2.threshold(img_gray, 0, 255, cv2.THRESH_OTSU)
-# cv2.imwrite(file_name + "_bin.png", src_bin)
+cv2.imwrite(file_name + "_bin.png", src_bin)
 
 cv2.imwrite(file_name + "_gray.png", img_gray)
 
