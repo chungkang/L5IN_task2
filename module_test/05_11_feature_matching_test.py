@@ -53,19 +53,42 @@ def match_feature_find_object(query_img, train_img, min_matches):
         dst = cv2.perspectiveTransform(pts, M)
         
         train_img = cv2.polylines(train_img, [np.int32(dst)], True, (0, 255, 0), 2, cv2.LINE_AA)
+        
+        # Mask the detected feature with white color
+        mask = np.zeros_like(train_img, dtype=np.uint8)
+        mask = cv2.fillPoly(mask, [np.int32(dst)], (255, 255, 255))
+        
+        # Cover the detected feature with white color rectangle
+        train_img = cv2.rectangle(train_img, (dst[0][0], dst[0][1]), (dst[2][0], dst[2][1]), (255, 255, 255), -1)
+
+        # # Mask the detected feature with white color
+        # mask = np.zeros_like(train_img, dtype=np.uint8)
+        # mask = cv2.fillPoly(mask, [np.int32(dst)], (255, 255, 255))
+        
+        # # Combine the masked image with the original image
+        # masked_img = cv2.bitwise_and(train_img, mask)
+        
+        # # Cover the detected feature with white color
+        # train_img = cv2.addWeighted(masked_img, 1, train_img, 0, 0)
+
+
     else:
         print('Not enough good matches are found - {}/{}'.format(len(good), min_matches))
             
     result_img = cv2.drawMatchesKnn(query_img, features1, train_img, features2, good, None, flags = 2)
+    cv2.imwrite(file_name + "_detect.png", result_img)
 
-    show_image(result_img, 'Feature matching and object recognition', 'RGB')
+    # show_image(mask,'test','RGB')
+
+    # show_image(result_img, 'Feature matching and object recognition', 'RGB')
+    
 
 
-file_name = "module_test\\result\\image2-2_crop_bilateral_part2"
+file_name = "module_test\\result\\IMG_3751_rect_crop_bilateral_crop"
 image_name = file_name + ".png"
 
 trainImage = cv2.imread(image_name) # trainImage
-# queryImage = cv2.imread(file_name + '_template1.png') # queryImage
-queryImage = cv2.imread( "module_test\\result\\image2-2_crop_bilateral_template1.png")
+queryImage = cv2.imread(file_name + '_template1.png') # queryImage
+# queryImage = cv2.imread( "module_test\\result\\image2-2_crop_bilateral_template1.png")
 
 match_feature_find_object(queryImage, trainImage, 10)
