@@ -34,6 +34,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     good = []    
     good_without_lists = []    
     matches = [match for match in matches if len(match) == 2] 
+    masked_img = ''
     for m, n in matches:
         if m.distance < 0.7 * n.distance:
             good.append([m])
@@ -76,7 +77,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     
 
 
-file_name = "module_test\\result\\IMG_3751_rect_crop_bilateral_crop"
+file_name = "module_test\\result\\IMG_3751_rect_crop_normalize"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
