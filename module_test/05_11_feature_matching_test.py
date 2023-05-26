@@ -33,8 +33,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     # Nearest neighbour ratio test to find good matches
     good = []    
     good_without_lists = []    
-    matches = [match for match in matches if len(match) == 2] 
-    masked_img = ''
+    matches = [match for match in matches if len(match) == 2]
     for m, n in matches:
         if m.distance < 0.7 * n.distance:
             good.append([m])
@@ -77,11 +76,11 @@ def match_feature_find_object(template_img, background_img, min_matches):
     
 
 
-file_name = "module_test\\result\\IMG_3751_rect_crop_normalize"
+file_name = "module_test\\result\\IMG_3751_rect_crop_bilateral_crop"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
 templateImage = cv2.imread(file_name + '_template1.png')
 # templateImage = cv2.imread( "module_test\\result\\image2-2_crop_bilateral_template1.png")
 
-match_feature_find_object(templateImage, backgroundImage, 7)
+match_feature_find_object(templateImage, backgroundImage, 2)
