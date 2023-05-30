@@ -1,35 +1,54 @@
+# https://www.kaggle.com/code/dataenergy/object-recognition-using-feature-matching
+
 import cv2
-import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.cluster import DBSCAN
+
+# Function to match features and find the object
+def match_feature_find_object(template_img, background_img, min_matches): 
+    # Create a SIFT object
+    sift = cv2.SIFT_create()
+
+    features1, des1 = sift.detectAndCompute(template_img, None)
+    features2, des2 = sift.detectAndCompute(background_img, None)
+
+    # Create Brute-Force matcher object
+    bf = cv2.BFMatcher(cv2.NORM_L2)
+    matches = bf.knnMatch(des1, des2, k = 2)
+
+    # Nearest neighbour ratio test to find good matches
+    good = []    
+    good_without_lists = []    
+    matches = [match for match in matches if len(match) == 2]
+    for m, n in matches:
+        if m.distance < 0.7 * n.distance:
+            good.append([m])
+            good_without_lists.append(m)
+            
+    if len(good) >= min_matches:
+        # Draw rectangles around the recognized objects
+        for match in good_without_lists:
+            query_idx = match.queryIdx
+            train_idx = match.trainIdx
+            x, y = np.int32(features2[train_idx].pt)
+            w, h = template_img.shape[:2]
+            x -= w // 2
+            y -= h // 2
+            background_img = cv2.rectangle(background_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        
+    else:
+        print('Not enough good matches are found - {}/{}'.format(len(good), min_matches))
+            
+    result_img = cv2.drawMatchesKnn(template_img, features1, background_img, features2, good, None, flags=2)
+    cv2.imwrite(file_name + "_detect.png", result_img)
+    cv2.imwrite(file_name + "_generated.png", background_img)
+
 
 file_name = "module_test\\result\\IMG_3751_rect_crop_bilateral_crop"
 image_name = file_name + ".png"
 
-# Load the images
-image1 = cv2.imread(file_name + '_template1.png')
-image2 = cv2.imread(image_name)
+backgroundImage = cv2.imread(image_name)
+templateImage = cv2.imread(file_name + '_template1.png')
+# templateImage = cv2.imread( "module_test\\result\\image2-2_crop_bilateral_template1.png")
 
-# image1 = cv2.imread(file_name + '_template1.png', cv2.IMREAD_GRAYSCALE)
-# image2 = cv2.imread(image_name, cv2.IMREAD_GRAYSCALE)
-
-# Create a SIFT object
-sift = cv2.SIFT_create()
-
-# Detect keypoints and compute descriptors
-keypoints1, descriptors1 = sift.detectAndCompute(image1, None)
-keypoints2, descriptors2 = sift.detectAndCompute(image2, None)
-
-# Create a BFMatcher object
-bf = cv2.BFMatcher()
-
-# Perform matching using KNN algorithm
-matches = bf.knnMatch(descriptors1, descriptors2, k=2)
-
-# Apply ratio test to filter good matches
-good_matches = []
-for m, n in matches:
-    if m.distance < 0.7 * n.distance:
-        good_matches.append(m)
-
-# Draw the matches
-output_image = cv2.drawMatches(image1, keypoints1, image2, keypoints2, good_matches, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-cv2.imwrite(file_name + "_output.png", output_image)
+match_feature_find_object(templateImage, backgroundImage, 2)

@@ -2,21 +2,6 @@
 
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
-
-# Function to display an image using matplotlib
-def show_image(img, title, colorspace):
-    dpi = 96
-    figsize = (img.shape[1] / dpi, img.shape[0] / dpi)
-    fig, ax = plt.subplots(figsize = figsize, dpi = dpi)
-    if colorspace == 'RGB':
-        plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), interpolation = 'spline16')
-    if colorspace == 'gray':
-        plt.imshow(img, cmap = 'gray')
-    plt.title(title, fontsize = 12)
-    ax.axis('off')
-    plt.show()
-
 
 # Function to match features and find the object
 def match_feature_find_object(template_img, background_img, min_matches): 
@@ -41,6 +26,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
             
     if len(good) >= min_matches:
         # Draw a polygon around the recognized object
+        # pixel coordinates of the keypoints from the que
         src_pts = np.float32([features1[m.queryIdx].pt for m in good_without_lists]).reshape(-1, 1, 2)
         dst_pts = np.float32([features2[m.trainIdx].pt for m in good_without_lists]).reshape(-1, 1, 2)
         
@@ -69,12 +55,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     result_img = cv2.drawMatchesKnn(template_img, features1, background_img, features2, good, None, flags = 2)
     cv2.imwrite(file_name + "_detect.png", result_img)
     cv2.imwrite(file_name + "_generated.png", background_img)
-
-    # show_image(mask,'test','RGB')
-
-    # show_image(result_img, 'Feature matching and object recognition', 'RGB')
     
-
 
 file_name = "module_test\\result\\IMG_3751_rect_crop_bilateral_crop"
 image_name = file_name + ".png"
