@@ -3,9 +3,12 @@
 import cv2
 import numpy as np
 from sklearn.cluster import DBSCAN
+# Import the required libraries
+from sklearn.cluster import DBSCAN
+import numpy as np
 
 # Function to match features and find the object
-def match_feature_find_object(template_img, background_img, min_matches): 
+def match_feature_find_object(template_img, background_img, min_matches):
     # Create a SIFT object
     sift = cv2.SIFT_create()
 
@@ -14,37 +17,45 @@ def match_feature_find_object(template_img, background_img, min_matches):
 
     # Create Brute-Force matcher object
     bf = cv2.BFMatcher(cv2.NORM_L2)
-    matches = bf.knnMatch(des1, des2, k = 2)
+    matches = bf.knnMatch(des1, des2, k=2)
 
     # Nearest neighbour ratio test to find good matches
-    good = []    
-    good_without_lists = []    
+    matches_list = []
+    filtered_matched_lists = []
     matches = [match for match in matches if len(match) == 2]
     for m, n in matches:
-        if m.distance < 0.7 * n.distance:
-            good.append([m])
-            good_without_lists.append(m)
-            
-    if len(good) >= min_matches:
-        # Draw rectangles around the recognized objects
-        for match in good_without_lists:
-            query_idx = match.queryIdx
-            train_idx = match.trainIdx
-            x, y = np.int32(features2[train_idx].pt)
-            w, h = template_img.shape[:2]
-            x -= w // 2
-            y -= h // 2
-            background_img = cv2.rectangle(background_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
-        
+        if m.distance < 0.75 * n.distance:
+            matches_list.append([m])
+            filtered_matched_lists.append(m)
+
+    if len(matches_list) >= min_matches:
+        # Cluster the keypoints
+        keypoints = np.float32([features2[m.trainIdx].pt for m in filtered_matched_lists])
+
+        # distance from template -> eps
+        dbscan = DBSCAN(eps=13, min_samples=3)  # Adjust eps and min_samples as needed
+        labels = dbscan.fit_predict(keypoints)
+
+        unique_labels = np.unique(labels)
+        for label in unique_labels:
+            cluster_points = keypoints[labels == label]
+            if len(cluster_points) > 2:
+                for point in cluster_points:
+                    x, y = np.int32(point)
+                    w, h = template_img.shape[:2]
+                    x -= w // 2
+                    y -= h // 2
+                    background_img = cv2.rectangle(background_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
     else:
-        print('Not enough good matches are found - {}/{}'.format(len(good), min_matches))
-            
-    result_img = cv2.drawMatchesKnn(template_img, features1, background_img, features2, good, None, flags=2)
+        print('Not enough good matches are found - {}/{}'.format(len(matches_list), min_matches))
+
+    result_img = cv2.drawMatchesKnn(template_img, features1, background_img, features2, matches_list, None, flags=2)
     cv2.imwrite(file_name + "_detect.png", result_img)
     cv2.imwrite(file_name + "_generated.png", background_img)
 
 
-file_name = "module_test\\result\\IMG_3751_rect_crop_bilateral_crop"
+file_name = "module_test\\result\\20220112_162232_rect_crop_bilateral_crop"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
