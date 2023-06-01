@@ -33,19 +33,25 @@ def match_feature_find_object(template_img, background_img, min_matches):
         keypoints = np.float32([features2[m.trainIdx].pt for m in filtered_matched_lists])
 
         # distance from template -> eps
-        dbscan = DBSCAN(eps=13, min_samples=3)  # Adjust eps and min_samples as needed
+        dbscan = DBSCAN(eps=20, min_samples=2)  # Adjust eps and min_samples as needed
         labels = dbscan.fit_predict(keypoints)
 
         unique_labels = np.unique(labels)
         for label in unique_labels:
             cluster_points = keypoints[labels == label]
-            if len(cluster_points) > 2:
-                for point in cluster_points:
-                    x, y = np.int32(point)
-                    w, h = template_img.shape[:2]
-                    x -= w // 2
-                    y -= h // 2
-                    background_img = cv2.rectangle(background_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            # if len(cluster_points) > 2:
+            # Calculate the bounding rectangle for the cluster
+            x, y, w, h = cv2.boundingRect(cluster_points)
+            
+            # Adjust the size of the rectangle based on the template image size
+            template_w, template_h = template_img.shape[:2]
+            x -= template_w // 2
+            y -= template_h // 2
+            w += template_w
+            h += template_h
+
+            # Draw a rectangle around the cluster
+            background_img = cv2.rectangle(background_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
     else:
         print('Not enough good matches are found - {}/{}'.format(len(matches_list), min_matches))
@@ -55,7 +61,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     cv2.imwrite(file_name + "_generated.png", background_img)
 
 
-file_name = "module_test\\result\\20220112_162232_rect_crop_bilateral_crop"
+file_name = "module_test\\result\\IMG_3751_rect_crop_bilateral_crop"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
