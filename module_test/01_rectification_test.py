@@ -536,7 +536,7 @@ if __name__ == '__main__':
     
     # file_name = "module_test\\result\\20220112_162250"
     # file_name = "module_test\\result_1\\image1"
-    file_name = "module_test\\result\\20220112_162232"
+    file_name = "module_test\\result\\20230530_135543"
     image_name = file_name + ".jpg"
     save_name_rectification = file_name + '_rect.png'
 
