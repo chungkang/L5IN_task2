@@ -20,16 +20,6 @@ def match_feature_find_object(template_img, background_img, min_matches):
     bf = cv2.BFMatcher(cv2.NORM_L2)
     matches = bf.knnMatch(des1, des2, k=2)
 
-    # # FLANN parameters
-    # FLANN_INDEX_KDTREE = 1
-    # index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
-    # search_params = dict(checks=50)   # or pass empty dictionary
-    # flann = cv2.FlannBasedMatcher(index_params,search_params)
-    # matches = flann.knnMatch(des1,des2,k=2)
-
-
-
-
     # Nearest neighbour ratio test to find good matches
     matches_list = []
     filtered_matched_lists = []
