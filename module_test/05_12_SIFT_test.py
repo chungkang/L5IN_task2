@@ -16,16 +16,16 @@ def match_feature_find_object(template_img, background_img, min_matches):
     features2, des2 = sift.detectAndCompute(background_img, None)
 
 
-    # # Create Brute-Force matcher object
-    # bf = cv2.BFMatcher(cv2.NORM_L2)
-    # matches = bf.knnMatch(des1, des2, k=2)
+    # Create Brute-Force matcher object
+    bf = cv2.BFMatcher(cv2.NORM_L2)
+    matches = bf.knnMatch(des1, des2, k=2)
 
-    # FLANN parameters
-    FLANN_INDEX_KDTREE = 1
-    index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
-    search_params = dict(checks=50)   # or pass empty dictionary
-    flann = cv2.FlannBasedMatcher(index_params,search_params)
-    matches = flann.knnMatch(des1,des2,k=2)
+    # # FLANN parameters
+    # FLANN_INDEX_KDTREE = 1
+    # index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
+    # search_params = dict(checks=50)   # or pass empty dictionary
+    # flann = cv2.FlannBasedMatcher(index_params,search_params)
+    # matches = flann.knnMatch(des1,des2,k=2)
 
 
 
@@ -35,7 +35,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     filtered_matched_lists = []
     matches = [match for match in matches if len(match) == 2]
     for m, n in matches:
-        if m.distance < 0.75 * n.distance:
+        if m.distance < 0.85 * n.distance:
             matches_list.append([m])
             filtered_matched_lists.append(m)
 
@@ -76,8 +76,6 @@ def match_feature_find_object(template_img, background_img, min_matches):
             # Draw a rectangle around the cluster in the background image
             background_img = cv2.polylines(background_img, [rect_points], isClosed=True, color=(0, 255, 0), thickness=2)
             # background_img = cv2.fillPoly(background_img, [rect_points], color=(255, 255, 255))
-        
-
 
     else:
         print('Not enough good matches are found - {}/{}'.format(len(filtered_matched_lists), 0))
@@ -87,10 +85,10 @@ def match_feature_find_object(template_img, background_img, min_matches):
     cv2.imwrite(file_name + "_generated.png", background_img)
 
 
-file_name = "module_test\\result\\20220112_162232_rect_crop_bilateral_crop"
+file_name = "module_test\\result\\nZBK5"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
-templateImage = cv2.imread(file_name + '_template2.png')
+templateImage = cv2.imread(file_name + '_template1.png')
 
 match_feature_find_object(templateImage, backgroundImage, 2)
