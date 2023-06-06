@@ -21,7 +21,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     filtered_matched_lists = []
     matches = [match for match in matches if len(match) == 2]
     for m, n in matches:
-        if m.distance < 0.75 * n.distance:
+        if m.distance < 0.85 * n.distance:
             matches_list.append([m])
             filtered_matched_lists.append(m)
 
@@ -34,34 +34,30 @@ def match_feature_find_object(template_img, background_img, min_matches):
         # distance from template -> eps
         dbscan = DBSCAN(eps=template_w, min_samples=min_matches)  # Adjust eps and min_samples as needed
         labels = dbscan.fit_predict(keypoints)
-
         unique_labels = np.unique(labels)
+
         for label in unique_labels:
-            cluster_points = keypoints[labels == label]
+            # Draw a polygon around the recognized object
+            # pixel coordinates of the keypoints from the que
+            # src_pts = np.float32([features1[m.queryIdx].pt for m in filtered_matched_lists]).reshape(-1, 1, 2)
+            src_pts = np.float32([features1[m.queryIdx].pt for m, lbl in zip(filtered_matched_lists, labels) if lbl == label]).reshape(-1, 1, 2)
 
-            # Calculate the bounding rectangle for the cluster
-            x, y, w, h = cv2.boundingRect(cluster_points)
+            cluster_points = keypoints[labels == label].reshape(-1, 1, 2)
             
-            x -= template_w // 2
-            y -= template_h // 2
-            w += template_w
-            h += template_h
+            # Skip clusters with fewer than 4 points
+            if len(src_pts) < 4 or len(cluster_points) < 4:
+                continue
 
-            # Apply scale and rotation based on template and background feature points
-            template_center = (template_w // 2, template_h // 2)
-            background_center = (x + w // 2, y + h // 2)
-            scale_factor = np.sqrt((template_w * template_w + template_h * template_h) / (w * w + h * h))
-            rotation_angle = np.arctan2(template_center[1] - background_center[1], template_center[0] - background_center[0])
+            # Get the transformation matrix
+            M, _ = cv2.findHomography(src_pts, cluster_points, cv2.RANSAC, 5.0)
 
-            # Rotate the rectangle
-            M = cv2.getRotationMatrix2D(background_center, np.degrees(rotation_angle), scale_factor)
-            rect_points = np.array([[x, y], [x + w, y], [x + w, y + h], [x, y + h]], dtype=np.float32)
-            rect_points = np.hstack((rect_points, np.ones((4, 1))))
-            rect_points = np.dot(M, rect_points.T).T[:, :2].astype(np.int32)
+            # Apply perspectiveTransform()
+            pts = np.float32([[-7, -7], [-7, template_h + 7], [template_w + 7, template_h + 7], [template_w + 7, -7]]).reshape(-1, 1, 2)
+            dst_pts = cv2.perspectiveTransform(pts, M)
 
             # Draw a rectangle around the cluster in the background image
-            background_img = cv2.polylines(background_img, [rect_points], isClosed=True, color=(0, 255, 0), thickness=2)
-            # background_img = cv2.fillPoly(background_img, [rect_points], color=(255, 255, 255))
+            background_img = cv2.polylines(background_img, [dst_pts.astype(np.int32)], isClosed=True, color=(0, 255, 0), thickness=2)
+            # background_img = cv2.fillPoly(background_img, [dst_pts.astype(np.int32)], color=(255, 255, 255))
         
     else:
         print('Not enough good matches are found - {}/{}'.format(len(filtered_matched_lists), 0))
@@ -71,10 +67,10 @@ def match_feature_find_object(template_img, background_img, min_matches):
     cv2.imwrite(file_name + "_generated.png", background_img)
 
 
-file_name = "module_test\\result\\20220112_162232_rect_crop_bilateral_crop"
+file_name = "module_test\\result\\IMG_20191015_181243_rect_crop_bilateral"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
-templateImage = cv2.imread(file_name + '_template2.png')
+templateImage = cv2.imread(file_name + '_template1.png')
 
 match_feature_find_object(templateImage, backgroundImage, 2)

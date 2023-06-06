@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-file_name = "module_test\\result\\20230530_135543_rect_crop"
+file_name = "module_test\\result\\IMG_20191015_181243_rect_crop"
 image_name = file_name + ".png"
 
 img = cv2.imread(image_name)
@@ -35,7 +35,7 @@ l_channel, a, b = cv2.split(lab)
 
 # Applying CLAHE to L-channel
 # feel free to try different values for the limit and grid size:
-clahe = cv2.createCLAHE(clipLimit=1, tileGridSize=(100,100))
+clahe = cv2.createCLAHE(clipLimit=1, tileGridSize=(75,75))
 cl = clahe.apply(l_channel)
 
 # merge the CLAHE enhanced L-channel with the a and b channel

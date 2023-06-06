@@ -57,7 +57,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     cv2.imwrite(file_name + "_generated.png", background_img)
     
 
-file_name = "module_test\\result\\IMG_3751_rect_crop_bilateral_crop"
+file_name = "module_test\\result\\20230530_135543_rect_crop_bilateral_crop"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)

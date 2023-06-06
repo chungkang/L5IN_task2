@@ -2,8 +2,11 @@ import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
 
-img1 = cv.imread('module_test\\result\\nZBK5_template1.png',cv.IMREAD_GRAYSCALE)          # queryImage
-img2 = cv.imread('module_test\\result\\nZBK5.png',cv.IMREAD_GRAYSCALE) # trainImage
+file_name = "module_test\\result\\IMG_20191015_181243_rect_crop_bilateral"
+image_name = file_name + ".png"
+
+img1 = cv.imread(file_name + '_template1.png',cv.IMREAD_GRAYSCALE)
+img2 = cv.imread(image_name,cv.IMREAD_GRAYSCALE)
 
 # Initiate SIFT detector
 sift = cv.SIFT_create()
@@ -28,4 +31,5 @@ draw_params = dict(matchColor = (0,255,0),
                    flags = cv.DrawMatchesFlags_DEFAULT)
 img3 = cv.drawMatchesKnn(img1,kp1,img2,kp2,matches,None,**draw_params)
 
-cv.imwrite("module_test\\result\\nZBK5_test.png", img3)
+cv.imwrite(file_name + "_test.png", img3)
+
