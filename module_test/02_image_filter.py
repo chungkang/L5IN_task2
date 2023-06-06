@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-file_name = "module_test\\result\\IMG_20191015_181243_rect_crop"
+file_name = "module_test\\result\\20230530_135546_rect_crop"
 image_name = file_name + ".png"
 
 img = cv2.imread(image_name)
@@ -46,3 +46,5 @@ enhanced_img = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
 
 # Stacking the original image with the enhanced image
 cv2.imwrite(file_name + "_clahe.png", enhanced_img)
+
+

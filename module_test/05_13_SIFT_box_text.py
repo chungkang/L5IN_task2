@@ -2,7 +2,7 @@ import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
 
-file_name = "module_test\\result\\IMG_20191015_181243_rect_crop_bilateral"
+file_name = "module_test\\result\\20230530_135546_rect_crop_bilateral"
 image_name = file_name + ".png"
 
 img1 = cv.imread(file_name + '_template1.png',cv.IMREAD_GRAYSCALE)
