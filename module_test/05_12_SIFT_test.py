@@ -3,9 +3,6 @@
 import cv2
 import numpy as np
 from sklearn.cluster import DBSCAN
-# Import the required libraries
-from sklearn.cluster import DBSCAN
-import numpy as np
 
 # Function to match features and find the object
 def match_feature_find_object(template_img, background_img, min_matches):
@@ -14,7 +11,6 @@ def match_feature_find_object(template_img, background_img, min_matches):
 
     features1, des1 = sift.detectAndCompute(template_img, None)
     features2, des2 = sift.detectAndCompute(background_img, None)
-
 
     # Create Brute-Force matcher object
     bf = cv2.BFMatcher(cv2.NORM_L2)
@@ -25,7 +21,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     filtered_matched_lists = []
     matches = [match for match in matches if len(match) == 2]
     for m, n in matches:
-        if m.distance < 0.85 * n.distance:
+        if m.distance < 0.75 * n.distance:
             matches_list.append([m])
             filtered_matched_lists.append(m)
 
@@ -66,7 +62,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
             # Draw a rectangle around the cluster in the background image
             background_img = cv2.polylines(background_img, [rect_points], isClosed=True, color=(0, 255, 0), thickness=2)
             # background_img = cv2.fillPoly(background_img, [rect_points], color=(255, 255, 255))
-
+        
     else:
         print('Not enough good matches are found - {}/{}'.format(len(filtered_matched_lists), 0))
 
@@ -75,10 +71,10 @@ def match_feature_find_object(template_img, background_img, min_matches):
     cv2.imwrite(file_name + "_generated.png", background_img)
 
 
-file_name = "module_test\\result\\20230530_135543_rect_crop_bilateral_crop"
+file_name = "module_test\\result\\20220112_162232_rect_crop_bilateral_crop"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
-templateImage = cv2.imread(file_name + '_template1.png')
+templateImage = cv2.imread(file_name + '_template2.png')
 
 match_feature_find_object(templateImage, backgroundImage, 2)
