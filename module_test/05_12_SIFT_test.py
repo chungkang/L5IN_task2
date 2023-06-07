@@ -21,7 +21,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     filtered_matched_lists = []
     matches = [match for match in matches if len(match) == 2]
     for m, n in matches:
-        if m.distance < 0.85 * n.distance:
+        if m.distance < 0.7 * n.distance:
             matches_list.append([m])
             filtered_matched_lists.append(m)
 
@@ -67,7 +67,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     cv2.imwrite(file_name + "_generated.png", background_img)
 
 
-file_name = "module_test\\result\\20230530_135546_rect_crop_bilateral"
+file_name = "module_test\\result\\20230530_135432_rect_crop_bilateral"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
