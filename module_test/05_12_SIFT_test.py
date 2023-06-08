@@ -12,9 +12,16 @@ def match_feature_find_object(template_img, background_img, min_matches):
     features1, des1 = sift.detectAndCompute(template_img, None)
     features2, des2 = sift.detectAndCompute(background_img, None)
 
-    # Create Brute-Force matcher object
-    bf = cv2.BFMatcher(cv2.NORM_L2)
-    matches = bf.knnMatch(des1, des2, k=2)
+    # # Create Brute-Force matcher object
+    # bf = cv2.BFMatcher(cv2.NORM_L2)
+    # matches = bf.knnMatch(des1, des2, k=2)
+
+    # FLANN parameters
+    FLANN_INDEX_KDTREE = 1
+    index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
+    search_params = dict(checks=50)   # or pass empty dictionary
+    flann = cv2.FlannBasedMatcher(index_params,search_params)
+    matches = flann.knnMatch(des1,des2,k=2)
 
     # Nearest neighbour ratio test to find good matches
     matches_list = []
@@ -67,7 +74,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
     cv2.imwrite(file_name + "_generated.png", background_img)
 
 
-file_name = "module_test\\result\\20230530_135432_rect_crop_bilateral"
+file_name = "module_test\\result\\IMG_3751_rect_crop_bilateral"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-file_name = "module_test\\result\\20230530_135546_rect_crop"
+file_name = "module_test\\result\\IMG_3751_rect_crop"
 image_name = file_name + ".png"
 
 img = cv2.imread(image_name)
