@@ -1,7 +1,8 @@
+# https://stackoverflow.com/questions/42938149/opencv-feature-matching-multiple-objects?noredirect=1&lq=1
+
 import cv2
-from matplotlib import pyplot as plt
 import numpy as np
-from sklearn.cluster import MeanShift, estimate_bandwidth
+from sklearn.cluster import DBSCAN, MeanShift, estimate_bandwidth
 
 MIN_MATCH_COUNT = 10
 
@@ -11,12 +12,14 @@ image_name = file_name + ".png"
 img1 = cv2.imread(file_name + '_template1.png')
 img2 = cv2.imread(image_name)
 
+# 1. Feature Extraction: ORB
 orb = cv2.ORB_create(10000, 1.2, nlevels=8, edgeThreshold = 5)
 
 # find the keypoints and descriptors with ORB
 kp1, des1 = orb.detectAndCompute(img1, None)
 kp2, des2 = orb.detectAndCompute(img2, None)
 
+# 3. Clustering
 x = np.array([kp2[0].pt])
 
 for i in range(len(kp2)):
@@ -65,7 +68,7 @@ for i in range(n_clusters_):
     # store all the good matches as per Lowe's ratio test.
     good = []
     for m,n in matches:
-        if m.distance < 0.7*n.distance:
+        if m.distance < 0.8*n.distance:
             good.append(m)
 
     if len(good)>3:
