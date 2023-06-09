@@ -5,7 +5,7 @@ from sklearn.cluster import MeanShift, estimate_bandwidth
 
 MIN_MATCH_COUNT = 10
 
-file_name = "module_test\\result\\GQyEj"
+file_name = "module_test\\result\\20230608_110853_bilateral"
 image_name = file_name + ".png"
 
 img1 = cv2.imread(file_name + '_template1.png')
@@ -92,7 +92,7 @@ for i in range(n_clusters_):
 
             img3 = cv2.drawMatches(img1, kp1, img2, kp2, good, None, **draw_params)
 
-            plt.imshow(img3, 'gray'), plt.show()
+            cv2.imwrite(file_name + "_gray_" + str(i) + ".png", img3)
 
     else:
         print ("Not enough matches are found - %d/%d" % (len(good),MIN_MATCH_COUNT))
