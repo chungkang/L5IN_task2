@@ -27,10 +27,15 @@ def match_feature_find_object(template_img, background_img, min_matches):
     matches_list = []
     filtered_matched_lists = []
     matches = [match for match in matches if len(match) == 2]
-    for m, n in matches:
-        if m.distance < 0.9 * n.distance:
+    # Need to draw only good matches, so create a mask
+    matchesMask = [[0,0] for i in range(len(matches))]
+    
+    # for m, n in matches:
+    for i,(m,n) in enumerate(matches):
+        if m.distance < 0.8 * n.distance:
             matches_list.append([m])
             filtered_matched_lists.append(m)
+            matchesMask[i]=[1,0]
 
     if len(filtered_matched_lists) > 0:
         # Cluster the keypoints
@@ -59,7 +64,7 @@ def match_feature_find_object(template_img, background_img, min_matches):
             M, _ = cv2.findHomography(src_pts, cluster_points, cv2.RANSAC, 5.0)
 
             # Apply perspectiveTransform()
-            pts = np.float32([[-7, -7], [-7, template_h + 7], [template_w + 7, template_h + 7], [template_w + 7, -7]]).reshape(-1, 1, 2)
+            pts = np.float32([[-5, -5], [-5, template_h + 5], [template_w + 5, template_h + 5], [template_w + 5, -5]]).reshape(-1, 1, 2)
             dst_pts = cv2.perspectiveTransform(pts, M)
 
             # Draw a rectangle around the cluster in the background image
@@ -72,6 +77,13 @@ def match_feature_find_object(template_img, background_img, min_matches):
     result_img = cv2.drawMatchesKnn(template_img, features1, background_img, features2, matches_list, None, flags=2)
     cv2.imwrite(file_name + "_detect.png", result_img)
     cv2.imwrite(file_name + "_generated.png", background_img)
+
+    draw_params = dict(matchColor = (0,255,0),
+                    singlePointColor = (255,0,0),
+                    matchesMask = matchesMask,
+                    flags = cv2.DrawMatchesFlags_DEFAULT)
+    img3 = cv2.drawMatchesKnn(template_img,features1,background_img,features2,matches,None,**draw_params)
+    cv2.imwrite(file_name + "_points.png", img3)
 
 
 file_name = "module_test\\result\\IMG_3751_rect_crop_bilateral"
