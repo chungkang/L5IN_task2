@@ -19,32 +19,6 @@ sift = cv2.SIFT_create()
 kp1, des1 = sift.detectAndCompute(templateImage, None)
 kp2, des2 = sift.detectAndCompute(backgroundImage, None)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # 3. Feature Matching: FLANN
 FLANN_INDEX_KDTREE = 1
 index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
