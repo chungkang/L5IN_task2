@@ -6,7 +6,7 @@ from sklearn.cluster import DBSCAN, MeanShift, estimate_bandwidth
 
 MIN_MATCH_COUNT = 4
 
-file_name = "module_test\\result\\20230608_110853"
+file_name = "module_test\\result\\20230608_110853_bilateral"
 image_name = file_name + ".png"
 
 templateImage = cv2.imread(file_name + '_template1.png')
@@ -36,7 +36,7 @@ for i in range(len(kp2)):
 
 x = x[1:len(x)]
 
-bandwidth = estimate_bandwidth(x, quantile=0.1, n_samples=500)
+bandwidth = estimate_bandwidth(x, quantile=0.05, n_samples=500)
 
 ms = MeanShift(bandwidth=bandwidth, bin_seeding=True, cluster_all=True)
 ms.fit(x)
@@ -119,6 +119,8 @@ for i in range(n_clusters_):
             dst = cv2.perspectiveTransform(pts,M)
 
             backgroundImage = cv2.polylines(backgroundImage,[np.int32(dst)],True,255,3, cv2.LINE_AA)
+            # backgroundImage = cv2.fillPoly(backgroundImage, [np.int32(dst)], color=(255, 255, 255))
+
 
             draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
                                singlePointColor=None,
