@@ -5,11 +5,12 @@ import numpy as np
 from sklearn.cluster import DBSCAN, MeanShift, estimate_bandwidth
 
 MIN_MATCH_COUNT = 4
+MATCH_DISTANCE = 0.7
 
-file_name = "module_test\\result\\20230608_110853_bilateral"
+file_name = "module_test\\result\\27173192_bilateral"
 image_name = file_name + ".png"
 
-templateImage = cv2.imread(file_name + '_template1.png')
+templateImage = cv2.imread(file_name + '_template'+'2.png')
 backgroundImage = cv2.imread(image_name)
 
 # # 1.1. Feature Extraction: ORB
@@ -21,7 +22,13 @@ backgroundImage = cv2.imread(image_name)
 # # 1.1.
 
 # 1.2. Feature Extraction: SIFT
-sift = cv2.SIFT_create()
+sift = cv2.SIFT_create(
+    nfeatures=0,        # Maximum number of keypoints to retain
+    nOctaveLayers=3,     # Number of octave layers within each scale octave
+    contrastThreshold=0.04,  # Threshold to filter out weak keypoints
+    edgeThreshold=10,    # Threshold for edge rejection
+    sigma=1.6            # Standard deviation of Gaussian blur applied to the input image
+)
 
 # find the keypoints and descriptors with SIFT
 kp1, des1 = sift.detectAndCompute(templateImage, None)
@@ -88,7 +95,7 @@ for i in range(n_clusters_):
     # 3. Feature Matching: FLANN
     FLANN_INDEX_KDTREE = 0
     index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
-    search_params = dict(checks = 50)
+    search_params = dict(checks = 100)
 
     flann = cv2.FlannBasedMatcher(index_params, search_params)
 
@@ -100,10 +107,10 @@ for i in range(n_clusters_):
     # store all the good matches as per Lowe's ratio test.
     good = []
     for m,n in matches:
-        if m.distance < 0.7 * n.distance:
+        if m.distance < MATCH_DISTANCE * n.distance:
             good.append(m)
 
-    if len(good)>3:
+    if len(good) >= MIN_MATCH_COUNT:
         src_pts = np.float32([ kp1[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
         dst_pts = np.float32([ kp2[m.trainIdx].pt for m in good ]).reshape(-1,1,2)
 
@@ -121,7 +128,6 @@ for i in range(n_clusters_):
             backgroundImage = cv2.polylines(backgroundImage,[np.int32(dst)],True,255,3, cv2.LINE_AA)
             # backgroundImage = cv2.fillPoly(backgroundImage, [np.int32(dst)], color=(255, 255, 255))
 
-
             draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
                                singlePointColor=None,
                                matchesMask=matchesMask,  # draw only inliers
@@ -129,7 +135,7 @@ for i in range(n_clusters_):
 
             img3 = cv2.drawMatches(templateImage, kp1, backgroundImage, kp2, good, None, **draw_params)
 
-            cv2.imwrite(file_name + "_gray_" + str(i) + ".png", img3)
+            cv2.imwrite(file_name + "_" + str(i) + ".png", img3)
 
     else:
         print ("Not enough matches are found - %d/%d" % (len(good),MIN_MATCH_COUNT))
