@@ -7,10 +7,10 @@ from sklearn.cluster import DBSCAN, MeanShift, estimate_bandwidth
 MIN_MATCH_COUNT = 4
 MATCH_DISTANCE = 0.7
 
-file_name = "module_test\\result\\27173192_bilateral"
+file_name = "module_test\\result\\image1_crop_biliteral"
 image_name = file_name + ".png"
 
-templateImage = cv2.imread(file_name + '_template'+'2.png')
+templateImage = cv2.imread(file_name + '_template'+'1.png')
 backgroundImage = cv2.imread(image_name)
 
 # # 1.1. Feature Extraction: ORB
@@ -26,8 +26,8 @@ sift = cv2.SIFT_create(
     nfeatures=0,        # Maximum number of keypoints to retain
     nOctaveLayers=3,     # Number of octave layers within each scale octave
     contrastThreshold=0.04,  # Threshold to filter out weak keypoints
-    edgeThreshold=10,    # Threshold for edge rejection
-    sigma=1.6            # Standard deviation of Gaussian blur applied to the input image
+    edgeThreshold=20,    # Threshold for edge rejection
+    sigma=1.2            # Standard deviation of Gaussian blur applied to the input image
 )
 
 # find the keypoints and descriptors with SIFT
@@ -140,3 +140,18 @@ for i in range(n_clusters_):
     else:
         print ("Not enough matches are found - %d/%d" % (len(good),MIN_MATCH_COUNT))
         matchesMask = None
+
+
+# Need to draw only good matches, so create a mask
+matchesMask = [[0,0] for i in range(len(matches))]
+# ratio test as per Lowe's paper
+for i,(m,n) in enumerate(matches):
+    if m.distance < 0.7 * n.distance:
+        matchesMask[i]=[1,0]
+draw_params = dict(matchColor = (0,255,0),
+                   singlePointColor = (255,0,0),
+                   matchesMask = matchesMask,
+                   flags = cv2.DrawMatchesFlags_DEFAULT)
+img3 = cv2.drawMatchesKnn(templateImage,kp1,backgroundImage,kp2,matches,None,**draw_params)
+
+cv2.imwrite(file_name + "_test.png", img3)

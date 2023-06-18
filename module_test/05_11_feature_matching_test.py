@@ -2,26 +2,26 @@ import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
 
-file_name = "module_test\\result\\27173192_bilateral"
+file_name = "module_test\\result\\image1_crop_biliteral"
 image_name = file_name + ".png"
 
-img1 = cv.imread(file_name + '_template'+'4.png',cv.IMREAD_GRAYSCALE)
+img1 = cv.imread(file_name + '_template'+'1.png',cv.IMREAD_GRAYSCALE)
 img2 = cv.imread(image_name,cv.IMREAD_GRAYSCALE)
 
 sift = cv.SIFT_create(
     nfeatures=0,      # Maximum number of keypoints to retain 0
     nOctaveLayers=3,     # Number of octave layers within each scale octave 3
     contrastThreshold=0.04,  # Threshold to filter out weak keypoints 0.04
-    edgeThreshold=10,    # Threshold for edge rejection 10
-    sigma=1.6            # Standard deviation of Gaussian blur applied to the input image 1.6
+    edgeThreshold=20,    # Threshold for edge rejection 10
+    sigma=1.2            # Standard deviation of Gaussian blur applied to the input image 1.6
 )
 
 kp1, des1 = sift.detectAndCompute(img1,None)
 kp2, des2 = sift.detectAndCompute(img2,None)
 
 # FLANN parameters
-FLANN_INDEX_KDTREE = 1
-index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 1)
+FLANN_INDEX_KDTREE = 0
+index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
 search_params = dict(checks=100)
 
 # # FLANN parameters
