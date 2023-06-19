@@ -7,7 +7,7 @@ from sklearn.cluster import DBSCAN, MeanShift, estimate_bandwidth
 MIN_MATCH_COUNT = 4
 MATCH_DISTANCE = 0.7
 
-file_name = "module_test\\result\\20230608_110853_bilateral"
+file_name = "module_test\\result\\IMG_3751_rect_bilateral"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)

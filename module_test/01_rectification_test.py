@@ -534,7 +534,7 @@ if __name__ == '__main__':
     # print("Rectifying {}".format(image_name))
     # save_name = '.'.join(image_name.split('.')[:-1]) + '_warped.png'
     
-    file_name = "module_test\\result\\20230608_110409"
+    file_name = "module_test\\result\\IMG_3751"
     image_name = file_name + ".jpg"
     save_name_rectification = file_name + '_rect.png'
 
