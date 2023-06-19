@@ -2,7 +2,7 @@ import numpy as np
 import cv2 as cv
 import matplotlib.pyplot as plt
 
-file_name = "module_test\\result\\image1_crop_biliteral"
+file_name = "module_test\\result\\20230608_110853_bilateral"
 image_name = file_name + ".png"
 
 img1 = cv.imread(file_name + '_template'+'1.png',cv.IMREAD_GRAYSCALE)
@@ -22,7 +22,7 @@ kp2, des2 = sift.detectAndCompute(img2,None)
 # FLANN parameters
 FLANN_INDEX_KDTREE = 0
 index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
-search_params = dict(checks=100)
+search_params = dict(checks=200)
 
 # # FLANN parameters
 # FLANN_INDEX_LSH = 5

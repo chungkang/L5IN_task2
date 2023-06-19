@@ -6,7 +6,7 @@ from sklearn.cluster import DBSCAN, MeanShift, estimate_bandwidth
 
 MIN_MATCH_COUNT = 2
 
-file_name = "module_test\\result\\IMG_3751_rect_crop_bilateral"
+file_name = "module_test\\result\\20230608_110853_bilateral"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
@@ -74,13 +74,13 @@ if len(filtered_matched_lists) > 0:
         dst_pts = cv2.perspectiveTransform(pts, M)
 
         # Draw a rectangle around the cluster in the background image
-        background_img = cv2.polylines(background_img, [dst_pts.astype(np.int32)], isClosed=True, color=(0, 255, 0), thickness=2)
+        background_img = cv2.polylines(backgroundImage, [dst_pts.astype(np.int32)], isClosed=True, color=(0, 255, 0), thickness=2)
         # background_img = cv2.fillPoly(background_img, [dst_pts.astype(np.int32)], color=(255, 255, 255))
     
 else:
     print('Not enough good matches are found - {}/{}'.format(len(filtered_matched_lists), 0))
 
-result_img = cv2.drawMatchesKnn(templateImage, features1, background_img, features2, matches_list, None, flags=2)
+result_img = cv2.drawMatchesKnn(templateImage, features1, backgroundImage, features2, matches_list, None, flags=2)
 cv2.imwrite(file_name + "_detect.png", result_img)
 cv2.imwrite(file_name + "_generated.png", background_img)
 
