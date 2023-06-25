@@ -6,8 +6,10 @@ from sklearn.cluster import DBSCAN, MeanShift, estimate_bandwidth
 
 MIN_MATCH_COUNT = 4
 MATCH_DISTANCE = 0.7
+NUMBER_OF_TEMPLATES = 8
+PAD = 7 # padding of template
 
-file_name = "module_test\\result\\IMG_3751_rect_bilateral"
+file_name = "module_test\\result\\20230608_110853_bilateral"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
@@ -20,8 +22,8 @@ sift = cv2.SIFT_create(
     sigma=1.2            # Standard deviation of Gaussian blur applied to the input image
 )
 
-# template 1-6
-for template_num in range(1, 7):
+# template
+for template_num in range(1, NUMBER_OF_TEMPLATES + 1):
     # Load template image
     templateImage = cv2.imread(file_name + '_template' + str(template_num) + '.png')
 
@@ -94,7 +96,7 @@ for template_num in range(1, 7):
                 matchesMask = mask.ravel().tolist()
 
                 h,w,_ = templateImage.shape
-                pts = np.float32([ [-5,-5],[-5,h+5],[w+5,h+5],[w+5,-5] ]).reshape(-1,1,2)
+                pts = np.float32([ [-PAD,-PAD],[-PAD,h+PAD],[w+PAD,h+PAD],[w+PAD,-PAD] ]).reshape(-1,1,2)
                 dst = cv2.perspectiveTransform(pts,M)
 
                 # backgroundImage = cv2.polylines(backgroundImage,[np.int32(dst)],True,255,3, cv2.LINE_AA)
