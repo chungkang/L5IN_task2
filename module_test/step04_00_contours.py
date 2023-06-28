@@ -35,8 +35,15 @@ for i in range(len(contours)):
         if hierarchy[0, i, 3] == -1:
             cv2.drawContours(img, [contours[i]], -1, (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255)), 3)
             
+            # Approximate the contour
+            epsilon = 0.003 * cv2.arcLength(contours[i], True)
+            approx = cv2.approxPolyDP(contours[i], epsilon, True)
+
             # Convert the contour to a Shapely LineString
-            coordinates = contours[i].squeeze().tolist()  # Convert contour coordinates to list
+            coordinates = approx.squeeze().tolist()  # Convert contour coordinates to list
+            
+            # Convert the contour to a Shapely LineString
+            # coordinates = contours[i].squeeze().tolist()  # Convert contour coordinates to list
             coordinates.append(coordinates[0]) # Close the polygon
             feature = {
                 "type": "Feature",
