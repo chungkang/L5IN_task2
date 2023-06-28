@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import random
 import json
-from shapely.geometry import LineString
+from shapely.geometry import LineString, Polygon
 
 MIN_AREA = 3000
 
@@ -37,6 +37,7 @@ for i in range(len(contours)):
             
             # Convert the contour to a Shapely LineString
             coordinates = contours[i].squeeze().tolist()  # Convert contour coordinates to list
+            coordinates.append(coordinates[0]) # Close the polygon
             feature = {
                 "type": "Feature",
                 "geometry": {
@@ -48,7 +49,7 @@ for i in range(len(contours)):
             features.append(feature)
 
             # for shapely
-            line_string = LineString(coordinates)
+            line_string = Polygon(coordinates)
             line_strings.append(line_string)
 
 cv2.imwrite(file_name + "_test0_bin.png", thresh)
