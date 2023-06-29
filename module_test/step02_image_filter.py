@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 
-file_name = "module_test\\result\\IMG_3751_rect"
-image_name = file_name + ".png"
+file_name = "module_test\\result\\2OG_4"
+image_name = file_name + ".jpg"
 
 img = cv2.imread(image_name)
 blur = cv2.GaussianBlur(img, (5, 5), 0)

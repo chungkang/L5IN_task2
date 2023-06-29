@@ -6,10 +6,10 @@ from sklearn.cluster import DBSCAN, MeanShift, estimate_bandwidth
 
 MIN_MATCH_COUNT = 4
 MATCH_DISTANCE = 0.7
-NUMBER_OF_TEMPLATES = 8
+NUMBER_OF_TEMPLATES = 7
 PAD = 7 # padding of template
 
-file_name = "module_test\\result\\20230608_110853_bilateral"
+file_name = "module_test\\result\\2OG_1_result"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
@@ -25,7 +25,7 @@ sift = cv2.SIFT_create(
 # template
 for template_num in range(1, NUMBER_OF_TEMPLATES + 1):
     # Load template image
-    templateImage = cv2.imread(file_name + '_template' + str(template_num) + '.png')
+    templateImage = cv2.imread(file_name + '\\' + str(template_num) + '.png')
 
     # 1. Feature Extraction: SIFT
     # find the keypoints and descriptors with SIFT
@@ -109,7 +109,7 @@ for template_num in range(1, NUMBER_OF_TEMPLATES + 1):
 
                 # img3 = cv2.drawMatches(templateImage, kp1, backgroundImage, kp2, good, None, **draw_params)
                 # cv2.imwrite(file_name + "_" + str(i) + ".png", img3)
-                cv2.imwrite(file_name + "_match_" + str(template_num) + "_" + str(i) + ".png", backgroundImage)
+                cv2.imwrite(file_name + "\\match_" + str(template_num) + "_" + str(i) + ".png", backgroundImage)
                 
 
 
