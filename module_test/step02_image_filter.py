@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-file_name = "module_test\\result\\2OG_4"
+file_name = "module_test\\result\\4OG_3"
 image_name = file_name + ".jpg"
 
 img = cv2.imread(image_name)
