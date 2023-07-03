@@ -42,7 +42,8 @@ for i in range(len(contours)):
 
             # Convert the contour to a Shapely LineString
             coordinates = approx.squeeze().tolist()  # Convert contour coordinates to list
-            
+            # Upside-down y-coordinates
+            coordinates = [[x, img.shape[0] - y] for x, y in coordinates]
             # Convert the contour to a Shapely LineString
             # coordinates = contours[i].squeeze().tolist()  # Convert contour coordinates to list
             coordinates.append(coordinates[0]) # Close the polygon
@@ -52,7 +53,7 @@ for i in range(len(contours)):
                     "type": "LineString",
                     "coordinates": coordinates
                 },
-                "properties": {}  # You can add additional properties if needed
+                "properties": {}  # add additional properties
             }
             features.append(feature)
 
