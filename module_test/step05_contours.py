@@ -7,7 +7,7 @@ from shapely.geometry import LineString, Polygon
 MIN_AREA = 3000
 BINARY_THRESHOLD = 140
 
-file_name = "module_test\\result\\2OG_2_result"
+file_name = "module_test\\result\\3OG_stitch_before\\3OG_full"
 image_name = file_name + ".png"
 
 img = cv2.imread(image_name)

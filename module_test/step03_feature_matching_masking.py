@@ -6,10 +6,10 @@ from sklearn.cluster import DBSCAN, MeanShift, estimate_bandwidth
 
 MIN_MATCH_COUNT = 4
 MATCH_DISTANCE = 0.7
-NUMBER_OF_TEMPLATES = 7
+NUMBER_OF_TEMPLATES = 5
 PAD = 7 # padding of template
 
-file_name = "module_test\\result\\2OG_1_result"
+file_name = "module_test\\result\\3OG_3_bilateral"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
@@ -88,14 +88,15 @@ for template_num in range(1, NUMBER_OF_TEMPLATES + 1):
             src_pts = np.float32([ kp1[m.queryIdx].pt for m in good ]).reshape(-1,1,2)
             dst_pts = np.float32([ kp2[m.trainIdx].pt for m in good ]).reshape(-1,1,2)
 
+            h,w,_ = templateImage.shape
             M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 2)
+            mask_h, mask_w = mask.shape
 
-            if M is None:
+            if M is None or mask_h > h or mask_w > w:
                 print ("No Homography")
             else:
                 matchesMask = mask.ravel().tolist()
 
-                h,w,_ = templateImage.shape
                 pts = np.float32([ [-PAD,-PAD],[-PAD,h+PAD],[w+PAD,h+PAD],[w+PAD,-PAD] ]).reshape(-1,1,2)
                 dst = cv2.perspectiveTransform(pts,M)
 

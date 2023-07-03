@@ -23,7 +23,6 @@ def plot_sift(gray, rgb, kp):
     img = cv2.drawKeypoints(gray, kp, tmp, flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
     return img
 
-
 def matcher(kp1, des1, img1, kp2, des2, img2, threshold):
     # BFMatcher with default params
     bf = cv2.BFMatcher()
@@ -119,11 +118,9 @@ def stitch_img(left, right, H, buffer_size):
     print("stiching image ...")
     
     # Convert to double and normalize. Avoid noise.
-    left = cv2.normalize(left.astype('float'), None, 
-                            0.0, 1.0, cv2.NORM_MINMAX)   
+    left = cv2.normalize(left.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)   
     # Convert to double and normalize.
-    right = cv2.normalize(right.astype('float'), None, 
-                            0.0, 1.0, cv2.NORM_MINMAX)   
+    right = cv2.normalize(right.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX)   
     
     # left image
     height_l, width_l, channel_l = left.shape
@@ -178,8 +175,8 @@ def stitch_img(left, right, H, buffer_size):
 
 file_path = "module_test\\result\\"
 
-left_gray, left_origin, left_rgb = read_image(file_path + '2OG_2_result.png')
-right_gray, right_origin, right_rgb = read_image(file_path + '2OG_3_result.png')
+left_gray, left_origin, left_rgb = read_image(file_path + '3OG_south.png')
+right_gray, right_origin, right_rgb = read_image(file_path + '3OG_3_result.png')
 
 # Better result when using gray
 kp_left, des_left = SIFT(left_gray)
@@ -188,15 +185,13 @@ kp_right, des_right = SIFT(right_gray)
 kp_left_img = plot_sift(left_gray, left_rgb, kp_left)
 kp_right_img = plot_sift(right_gray, right_rgb, kp_right)
 
-matches = matcher(kp_left, des_left, left_rgb, kp_right, des_right, right_rgb, 0.5)
+matches = matcher(kp_left, des_left, left_rgb, kp_right, des_right, right_rgb, 0.6)
 
 inliers, H = ransac(matches, 0.5, 2000)
 
 merged_image = stitch_img(left_rgb, right_rgb, H, 1000)
 
-merged_image.shape
+# plt.imshow(merged_image)
 
-cv2.imwrite(file_path + "stitched2.png", 255 * merged_image)
-
-plot_matches(matches, merged_image)
+cv2.imwrite(file_path + "3OG_stitch.png", 255 * merged_image)
 
