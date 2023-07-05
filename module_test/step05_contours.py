@@ -5,9 +5,10 @@ import json
 from shapely.geometry import LineString, Polygon
 
 MIN_AREA = 3000
-BINARY_THRESHOLD = 140
+BINARY_THRESHOLD = 130
+APPROX_CONTOUR = 0.001
 
-file_name = "module_test\\result\\3OG_stitch_before\\3OG_full"
+file_name = "module_test\\result\\sample"
 image_name = file_name + ".png"
 
 img = cv2.imread(image_name)
@@ -37,7 +38,7 @@ for i in range(len(contours)):
             cv2.drawContours(img, [contours[i]], -1, (random.randrange(0, 255), random.randrange(0, 255), random.randrange(0, 255)), 3)
             
             # Approximate the contour
-            epsilon = 0.003 * cv2.arcLength(contours[i], True)
+            epsilon = APPROX_CONTOUR * cv2.arcLength(contours[i], True)
             approx = cv2.approxPolyDP(contours[i], epsilon, True)
 
             # Convert the contour to a Shapely LineString
@@ -50,8 +51,8 @@ for i in range(len(contours)):
             feature = {
                 "type": "Feature",
                 "geometry": {
-                    "type": "LineString",
-                    "coordinates": coordinates
+                    "type": "Polygon",
+                    "coordinates": [coordinates]
                 },
                 "properties": {}  # add additional properties
             }
@@ -61,7 +62,7 @@ for i in range(len(contours)):
             line_string = Polygon(coordinates)
             line_strings.append(line_string)
 
-# cv2.imwrite(file_name + "_test0_bin.png", thresh)
+cv2.imwrite(file_name + "_test0_bin.png", thresh)
 cv2.imwrite(file_name + "_test0.png", img)
 
 # Create GeoJSON object
