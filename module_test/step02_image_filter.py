@@ -1,11 +1,11 @@
 import cv2
 import numpy as np
 
-file_name = "module_test\\result\\4OG_3"
+file_name = "module_test\\result\\4OG_4"
 image_name = file_name + ".jpg"
 
 img = cv2.imread(image_name)
-blur = cv2.GaussianBlur(img, (5, 5), 0)
+# blur = cv2.GaussianBlur(img, (5, 5), 0)
 # cv2.imwrite("module_test\\result_2\\image1_wraped_blur.png", blur)
 
 # median = cv2.medianBlur(img, 5)
@@ -30,19 +30,19 @@ cv2.imwrite(file_name + "_bilateral.png", bilateral)
 
 # CLAHE https://stackoverflow.com/questions/39308030/how-do-i-increase-the-contrast-of-an-image-in-python-opencv
 # converting to LAB color space
-lab= cv2.cvtColor(bilateral, cv2.COLOR_BGR2LAB)
-l_channel, a, b = cv2.split(lab)
+# lab= cv2.cvtColor(bilateral, cv2.COLOR_BGR2LAB)
+# l_channel, a, b = cv2.split(lab)
 
 # Applying CLAHE to L-channel
 # feel free to try different values for the limit and grid size:
-clahe = cv2.createCLAHE(clipLimit=1, tileGridSize=(75,75))
-cl = clahe.apply(l_channel)
+# clahe = cv2.createCLAHE(clipLimit=1, tileGridSize=(75,75))
+# cl = clahe.apply(l_channel)
 
 # merge the CLAHE enhanced L-channel with the a and b channel
-limg = cv2.merge((cl,a,b))
+# limg = cv2.merge((cl,a,b))
 
 # Converting image from LAB Color model to BGR color spcae
-enhanced_img = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
+# enhanced_img = cv2.cvtColor(limg, cv2.COLOR_LAB2BGR)
 
 # Stacking the original image with the enhanced image
 # cv2.imwrite(file_name + "_clahe.png", enhanced_img)

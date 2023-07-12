@@ -6,10 +6,10 @@ from sklearn.cluster import DBSCAN, MeanShift, estimate_bandwidth
 
 MIN_MATCH_COUNT = 4
 MATCH_DISTANCE = 0.7
-NUMBER_OF_TEMPLATES = 5
-PAD = 7 # padding of template
+NUMBER_OF_TEMPLATES = 8
+PAD = 5 # padding of template
 
-file_name = "module_test\\result\\3OG_3_bilateral"
+file_name = "module_test\\result\\4OG_4_bilateral"
 image_name = file_name + ".png"
 
 backgroundImage = cv2.imread(image_name)
@@ -92,27 +92,32 @@ for template_num in range(1, NUMBER_OF_TEMPLATES + 1):
             M, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 2)
             mask_h, mask_w = mask.shape
 
-            if M is None or mask_h > h or mask_w > w:
+            if M is None:
                 print ("No Homography")
             else:
                 matchesMask = mask.ravel().tolist()
 
                 pts = np.float32([ [-PAD,-PAD],[-PAD,h+PAD],[w+PAD,h+PAD],[w+PAD,-PAD] ]).reshape(-1,1,2)
                 dst = cv2.perspectiveTransform(pts,M)
+               
+                # extract x and y coodinates
+                x = dst[:,:,0]
+                y = dst[:,:,1]
 
-                # backgroundImage = cv2.polylines(backgroundImage,[np.int32(dst)],True,255,3, cv2.LINE_AA)
-                backgroundImage = cv2.fillPoly(backgroundImage, [np.int32(dst)], color=(255, 255, 255))
+                dst_w = x.max() - x.min() - 8 * PAD
+                dst_h = y.max() - y.min() - 8 * PAD
 
-                draw_params = dict(matchColor=(0, 255, 0),  # draw matches in green color
-                                singlePointColor=None,
-                                matchesMask=matchesMask,  # draw only inliers
-                                flags=2)
+                if dst_w > w or dst_h > h:
+                    print ("exceeds size of template")
+                else:
+                    backgroundImage = cv2.fillPoly(backgroundImage, [np.int32(dst)], color=(255, 255, 255))
 
-                # img3 = cv2.drawMatches(templateImage, kp1, backgroundImage, kp2, good, None, **draw_params)
-                # cv2.imwrite(file_name + "_" + str(i) + ".png", img3)
-                cv2.imwrite(file_name + "\\match_" + str(template_num) + "_" + str(i) + ".png", backgroundImage)
-                
+                    draw_params = dict(matchColor=(0, 255, 0),  # draw matches in white color
+                                    singlePointColor=None,
+                                    matchesMask=matchesMask,  # draw only inliers
+                                    flags=2)
 
+                    cv2.imwrite(file_name + "\\match_" + str(template_num) + "_" + str(i) + ".png", backgroundImage)
 
         else:
             print ("Not enough matches are found - %d/%d" % (len(good),MIN_MATCH_COUNT))

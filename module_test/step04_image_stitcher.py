@@ -128,7 +128,6 @@ def stitch_img(left, right, H, buffer_size):
     width_new = int(round(abs(x_min) + width_r + buffer_size))
     size = (width_new, height_new)
     
-
     warped_r = cv2.warpPerspective(src=right, M=translation_mat, dsize=size)
      
     black = np.zeros(3)  # Black pixel.
@@ -136,7 +135,11 @@ def stitch_img(left, right, H, buffer_size):
     # Stitching procedure, store results in warped_l.
     for i in tqdm(range(warped_r.shape[0])):
         for j in range(warped_r.shape[1]):
-            pixel_l = warped_l[i, j, :]
+            if j < warped_l.shape[1]:
+                pixel_l = warped_l[i, j, :]
+            else:
+                pixel_l = black
+
             pixel_r = warped_r[i, j, :]
             
             if not np.array_equal(pixel_l, black) and np.array_equal(pixel_r, black):
@@ -154,8 +157,8 @@ def stitch_img(left, right, H, buffer_size):
 
 file_path = "module_test\\result\\"
 
-left_gray, left_origin, left_rgb = read_image(file_path + '3OG_south.png')
-right_gray, right_origin, right_rgb = read_image(file_path + '3OG_3_result.png')
+left_gray, left_origin, left_rgb = read_image(file_path + '4OG_south.png')
+right_gray, right_origin, right_rgb = read_image(file_path + '4OG_1_result.png')
 
 # Better result when using gray
 kp_left, des_left = SIFT(left_gray)
@@ -167,7 +170,5 @@ inliers, H = ransac(matches, 0.5, 2000)
 
 merged_image = stitch_img(left_rgb, right_rgb, H, 1000)
 
-# plt.imshow(merged_image)
-
-cv2.imwrite(file_path + "3OG_stitch.png", 255 * merged_image)
+cv2.imwrite(file_path + "4OG_stitch.png", 255 * merged_image)
 

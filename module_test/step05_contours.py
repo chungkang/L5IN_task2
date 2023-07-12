@@ -5,10 +5,10 @@ import json
 from shapely.geometry import LineString, Polygon
 
 MIN_AREA = 3000
-BINARY_THRESHOLD = 130
+BINARY_THRESHOLD = 135
 APPROX_CONTOUR = 0.001
 
-file_name = "module_test\\result\\sample"
+file_name = "module_test\\result\\4OG_full_color"
 image_name = file_name + ".png"
 
 img = cv2.imread(image_name)
@@ -25,7 +25,8 @@ mor_img = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, (3, 3), iterations=3)
 contours, hierarchy = cv2.findContours(mor_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) 
 
 # Convert lines to GeoJSON format
-features = []
+line_features = []
+polygon_features = []
 # Convert lines to Shapely LineString instances
 line_strings = []
 
@@ -48,7 +49,7 @@ for i in range(len(contours)):
             # Convert the contour to a Shapely LineString
             # coordinates = contours[i].squeeze().tolist()  # Convert contour coordinates to list
             coordinates.append(coordinates[0]) # Close the polygon
-            feature = {
+            polygon_feature = {
                 "type": "Feature",
                 "geometry": {
                     "type": "Polygon",
@@ -56,7 +57,17 @@ for i in range(len(contours)):
                 },
                 "properties": {}  # add additional properties
             }
-            features.append(feature)
+            polygon_features.append(polygon_feature)
+
+            line_feature = {
+                "type": "Feature",
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": coordinates
+                },
+                "properties": {}  # add additional properties
+            }
+            line_features.append(line_feature)
 
             # for shapely
             line_string = Polygon(coordinates)
@@ -66,11 +77,18 @@ cv2.imwrite(file_name + "_test0_bin.png", thresh)
 cv2.imwrite(file_name + "_test0.png", img)
 
 # Create GeoJSON object
-geojson_obj = {
+geojson_line_obj = {
     "type": "FeatureCollection",
-    "features": features
+    "features": line_features
+}
+geojson_polygon_obj = {
+    "type": "FeatureCollection",
+    "features": polygon_features
 }
 
 # Save GeoJSON to a file
-with open(file_name + "_contour.geojson", "w") as f:
-    json.dump(geojson_obj, f)
+with open(file_name + "_line.geojson", "w") as f:
+    json.dump(geojson_line_obj, f)
+with open(file_name + "_polygon.geojson", "w") as f:
+    json.dump(geojson_polygon_obj, f)
+
