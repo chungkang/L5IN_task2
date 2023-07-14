@@ -22,7 +22,9 @@ _, thresh = cv2.threshold(gray, BINARY_THRESHOLD, 255, cv2.THRESH_BINARY)
 mor_img = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, (3, 3), iterations=3)
 
 # hierachy: [Next, Previous, First_Child, Parent]
-contours, hierarchy = cv2.findContours(mor_img, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) 
+contours, hierarchy = cv2.findContours(mor_img, cv2.RETR_LIST, cv2.CHAIN_APPROX_TC89_L1)
+# mode RETR_LIST: retrieves all of the contours without establishing any hierarchical relationships
+# mothod CHAIN_APPROX_TC89_L1: advanced contour approximation methods that use the Teh-Chin chain approximation algorithm
 
 # Convert lines to GeoJSON format
 line_features = []
