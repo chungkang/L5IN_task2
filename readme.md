@@ -3,7 +3,7 @@
 Input source: images of Emergency Evacuation Plan
 Expected Result: geospatial format (shp, geojson) of vectorized floor plan
 
-# Steps of logics
+# Main Logic
 ## 1. Take photo of Emergency Evacuation Plan
 Better to have well projected, high resolution and low glare/reflected images
 
