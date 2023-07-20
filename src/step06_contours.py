@@ -3,6 +3,8 @@ import random
 import json
 from shapely.geometry import Polygon
 
+# modify file_name to test different images
+
 MIN_AREA = 3000
 BINARY_THRESHOLD = 135
 APPROX_CONTOUR = 0.001
@@ -92,4 +94,3 @@ with open(file_name + "_line.geojson", "w") as f:
     json.dump(geojson_line_obj, f)
 with open(file_name + "_polygon.geojson", "w") as f:
     json.dump(geojson_polygon_obj, f)
-

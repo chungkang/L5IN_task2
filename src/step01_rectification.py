@@ -521,26 +521,11 @@ def rectify_image(image, clip_factor=6, algorithm='independent',
 
     return warped_img
 
-
-
-
-
+# modify file_name and image_name to test
 if __name__ == '__main__':
-    # import sys
-    # image_name = sys.argv[-1]
-    # image = io.imread(image_name)
-    # print("Rectifying {}".format(image_name))
-    # save_name = '.'.join(image_name.split('.')[:-1]) + '_warped.png'
-    
     file_name = "module_test\\result\\20230608_110409"
     image_name = file_name + ".jpg"
     save_name_rectification = file_name + '_rect.png'
 
     img = rectify_image(image_name, 4, algorithm='independent')
     io.imsave(save_name_rectification, img)
-
-    # save_name_bilateral_filter = file_name + '_map_bilateral.png'
-    # cv2_img = img_as_ubyte(img)
-    # blur = cv2.GaussianBlur(cv2_img, (5, 5), 0)
-    # bilateral = cv2.bilateralFilter(blur, 9, 75, 75)
-    # cv2.imwrite(save_name_bilateral_filter, bilateral)

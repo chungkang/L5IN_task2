@@ -4,9 +4,13 @@ import cv2
 import numpy as np
 from sklearn.cluster import MeanShift, estimate_bandwidth
 
+# modify file_name to test different images
+# create a folder with the same name as the image to store the templates and results
+# cropped template's name should be 1.png, 2.png, 3.png, ...
+
 MIN_MATCH_COUNT = 4
 MATCH_DISTANCE = 0.7
-NUMBER_OF_TEMPLATES = 8
+NUMBER_OF_TEMPLATES = 8 # should fit the number of templates
 PAD = 5 # padding of template
 
 file_name = "module_test\\result\\4OG_4_bilateral"

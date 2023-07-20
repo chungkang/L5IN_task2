@@ -3,6 +3,9 @@ import numpy as np
 import random
 from tqdm.notebook import tqdm
 
+# modify file_name to test different images
+# If the single floor is separated with 3 parts, 2 parts are stitched together first, then the last part is stitched with the result
+
 # Read image and convert them to gray
 def read_image(path):
     img = cv2.imread(path)
@@ -11,9 +14,7 @@ def read_image(path):
     return img_gray, img, img_rgb
 
 def SIFT(img):
-    siftDetector= cv2.xfeatures2d.SIFT_create() # limit 1000 points
-    # siftDetector= cv2.SIFT_create()  # depends on OpenCV version
-
+    siftDetector= cv2.xfeatures2d.SIFT_create()
     kp, des = siftDetector.detectAndCompute(img, None)
     return kp, des
 

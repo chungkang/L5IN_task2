@@ -1,5 +1,6 @@
 import cv2
 
+# modify file_name to test different images
 file_name = "module_test\\result\\4OG_4"
 image_name = file_name + ".jpg"
 

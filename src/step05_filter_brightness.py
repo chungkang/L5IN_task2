@@ -1,6 +1,9 @@
-# https://redketchup.io/color-picker
+
 import cv2
 import numpy as np
+
+# modify file_name to test different images
+# https://redketchup.io/color-picker
 
 def convert_standard_hsv_to_opencv_hsv(hsv_standard):
     hsv_opencv = np.array(hsv_standard, dtype=np.float32)
@@ -18,7 +21,7 @@ img = cv2.imread(image_name)
 # Convert to HSV
 hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-# Define the light green color range in HSV
+# Define the light green color range in HSV -> can be changed for target color
 lower_green = np.array(convert_standard_hsv_to_opencv_hsv([50, 5, 40]))
 upper_green = np.array(convert_standard_hsv_to_opencv_hsv([150, 20, 70]))
 
